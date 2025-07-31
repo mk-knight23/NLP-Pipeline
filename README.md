@@ -1,6 +1,8 @@
 # Comprehensive NLP Pipeline Guide
 
 ![NLP Pipeline Architecture](https://miro.medium.com/v2/resize:fit:1400/1*lBLej7kiabKajpJAdnkxeA.png)
+1 : https://mk-knight23.github.io/NLP-Pipeline
+2 : https://chat.qwen.ai/s/deploy/fb411a58-c27f-44bc-b561-f308b5473c0e
 
 ## Overview
 Welcome to the Comprehensive NLP Pipeline Guide, an interactive and visually stunning website that provides a complete overview of building robust Natural Language Processing pipelines based on the latest research and industry practices from 2024-2025.
