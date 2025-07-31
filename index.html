@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive NLP Pipeline Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            background-attachment: fixed;
+        }
+        .code-block {
+            font-family: 'JetBrains Mono', monospace;
+            background: #1e293b;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .code-keyword {
+            color: #fbbf24;
+        }
+        .code-string {
+            color: #86efac;
+        }
+        .code-comment {
+            color: #94a3b8;
+            font-style: italic;
+        }
+        .card {
+            transition: all 0.3s ease;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .metric-card {
+            background: linear-gradient(135deg, #6173ff 0%, #4c51bf 100%);
+        }
+        .metric-card:nth-child(2) {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5253 100%);
+        }
+        .metric-card:nth-child(3) {
+            background: linear-gradient(135deg, #48dbfb 0%, #1dd1a1 100%);
+        }
+        .metric-card:nth-child(4) {
+            background: linear-gradient(135deg, #f368e0 0%, #9980fa 100%);
+        }
+        .pipeline-visualization {
+            background: linear-gradient(45deg, #1e293b, #334155);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        .pipeline-step {
+            position: relative;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .pipeline-step:not(:last-child):after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 15px solid rgba(255, 255, 255, 0.1);
+        }
+        .library-card {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .highlight-gradient {
+            background: linear-gradient(90deg, #6173ff, #ff6b6b, #48dbfb, #f368e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-900 via-purple-900 to-indigo-900 text-white">
+        <div class="container mx-auto px-6 py-16">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+                        Comprehensive <span class="highlight-gradient">NLP Pipeline</span> Guide
+                    </h1>
+                    <p class="text-xl text-blue-100 mb-8 leading-relaxed">
+                        Based on the latest research and industry practices from 2024-2025, here's a complete guide to building robust Natural Language Processing pipelines.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <button class="bg-white text-blue-900 px-8 py-3 rounded-full font-semibold hover:bg-blue-50 transition duration-300 shadow-lg">
+                            Explore Guide
+                        </button>
+                        <button class="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-blue-900 transition duration-300">
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <img src="https://miro.medium.com/v2/resize:fit:1400/1*lBLej7kiabKajpJAdnkxeA.png" alt="NLP Pipeline Architecture" class="rounded-2xl shadow-2xl floating max-w-full h-auto">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Quick Stats -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="metric-card text-white p-8 text-center rounded-2xl">
+                    <div class="text-4xl font-bold mb-2">6</div>
+                    <div class="text-blue-100">Core Components</div>
+                </div>
+                <div class="metric-card text-white p-8 text-center rounded-2xl">
+                    <div class="text-4xl font-bold mb-2">15+</div>
+                    <div class="text-blue-100">Data Sources</div>
+                </div>
+                <div class="metric-card text-white p-8 text-center rounded-2xl">
+                    <div class="text-4xl font-bold mb-2">20+</div>
+                    <div class="text-blue-100">Model Types</div>
+                </div>
+                <div class="metric-card text-white p-8 text-center rounded-2xl">
+                    <div class="text-4xl font-bold mb-2">5</div>
+                    <div class="text-blue-100">Future Trends</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pipeline Overview -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-6">NLP Pipeline Architecture</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    The NLP pipeline is a systematic sequence of processes that transform raw text data into meaningful insights and applications. Unlike traditional ML pipelines, NLP pipelines require specialized text processing steps to convert human language into machine-readable formats.
+                </p>
+            </div>
+
+            <div class="pipeline-visualization text-white">
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                    <div class="pipeline-step">
+                        <div class="text-3xl mb-4">
+                            <ion-icon name="cloud-download-outline"></ion-icon>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Data Acquisition</h3>
+                        <p class="text-blue-100">Obtaining quality text data from various sources including databases, web scraping, APIs, and document extraction.</p>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="text-3xl mb-4">
+                            <ion-icon name="brush-outline"></ion-icon>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Text Preprocessing</h3>
+                        <p class="text-blue-100">Cleaning and normalizing raw text through tokenization, lowercasing, stop word removal, and stemming/lemmatization.</p>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="text-3xl mb-4">
+                            <ion-icon name="analytics-outline"></ion-icon>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Feature Engineering</h3>
+                        <p class="text-blue-100">Transforming text into numerical representations using BoW, TF-IDF, n-grams, and modern word embeddings.</p>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="text-3xl mb-4">
+                            <ion-icon name="cog-outline"></ion-icon>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Model Selection</h3>
+                        <p class="text-blue-100">Choosing appropriate models from rule-based systems, traditional ML, deep learning, or cloud APIs.</p>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="text-3xl mb-4">
+                            <ion-icon name="rocket-outline"></ion-icon>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Deployment & Production</h3>
+                        <p class="text-blue-100">Deploying models with container orchestration, API frameworks, and implementing monitoring and maintenance.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Components -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center text-gray-900 mb-16">Core Components of NLP Pipeline</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Data Acquisition -->
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                            <ion-icon name="download-outline" class="text-blue-600 text-xl"></ion-icon>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900">1. Data Acquisition</h3>
+                    </div>
+                    <p class="text-gray-600 mb-6">The foundation of any NLP system starts with obtaining quality text data:</p>
+                    
+                    <h4 class="font-semibold text-gray-900 mb-3">Data Sources:</h4>
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex items-start">
+                            <ion-icon name="cube-outline" class="text-blue-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Available Data:</strong> Internal databases, existing datasets, company documents</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="globe-outline" class="text-blue-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Public Datasets:</strong> Kaggle, UCI Repository, government databases, academic datasets</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="code-slash-outline" class="text-blue-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Web Scraping:</strong> BeautifulSoup, Scrapy for extracting web content</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="logo-rss" class="text-blue-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>APIs:</strong> Social media APIs (Twitter, Reddit), news aggregators, linguistic databases</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="document-outline" class="text-blue-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Document Extraction:</strong> PDFs (PyPDF2, PDFMiner), images (OCR with Tesseract)</span>
+                        </li>
+                    </ul>
+
+                    <h4 class="font-semibold text-gray-900 mb-3">Data Augmentation Techniques:</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <ion-icon name="swap-horizontal-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Synonym Replacement:</strong> Replace words with synonyms using WordNet</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="repeat-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Back Translation:</strong> Translate to another language and back</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="git-branch-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Bigram Flipping:</strong> Alter word sequences for variation</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="alert-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Noise Addition:</strong> Introduce controlled perturbations</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Text Preprocessing -->
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                            <ion-icon name="construct-outline" class="text-green-600 text-xl"></ion-icon>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900">2. Text Preprocessing</h3>
+                    </div>
+                    <p class="text-gray-600 mb-6">Critical phase for preparing raw text for analysis:</p>
+                    
+                    <h4 class="font-semibold text-gray-900 mb-3">Basic Cleaning:</h4>
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex items-start">
+                            <ion-icon name="code-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>HTML Tag Removal:</strong> Strip formatting elements from web text</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="language-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Unicode Normalization:</strong> Handle emojis, special characters, different encodings</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="checkmark-done-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Spell Checking:</strong> Correct common typographical errors</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="code-slash-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Regular Expressions:</strong> Remove/extract patterns (emails, URLs, phone numbers)</span>
+                        </li>
+                    </ul>
+
+                    <h4 class="font-semibold text-gray-900 mb-3">Core Preprocessing Steps:</h4>
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex items-start">
+                            <ion-icon name="text-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Tokenization:</strong> Segment text into sentences and words</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="text-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Lowercasing:</strong> Normalize case for consistency</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="filter-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Stop Word Removal:</strong> Filter common words like "the", "is", "and"</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="leaf-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Stemming/Lemmatization:</strong> Reduce words to root forms</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="pencil-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Punctuation Handling:</strong> Remove or standardize punctuation</span>
+                        </li>
+                    </ul>
+
+                    <h4 class="font-semibold text-gray-900 mb-3">Advanced Preprocessing:</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <ion-icon name="git-network-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Part-of-Speech (POS) Tagging:</strong> Identify grammatical categories</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="person-circle-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Named Entity Recognition (NER):</strong> Extract people, places, organizations</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="git-branch-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Dependency Parsing:</strong> Analyze grammatical relationships</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="git-merge-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Coreference Resolution:</strong> Link pronouns to their references</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature Engineering -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="flex items-center mb-12">
+                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+                    <ion-icon name="stats-chart-outline" class="text-purple-600 text-xl"></ion-icon>
+                </div>
+                <h2 class="text-4xl font-bold text-gray-900">3. Feature Engineering</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Traditional Approaches</h3>
+                    
+                    <div class="mb-8">
+                        <h4 class="text-xl font-semibold text-gray-900 mb-4">Bag of Words (BoW)</h4>
+                        <div class="code-block">
+                            <pre><code><span class="code-keyword">from</span> sklearn.feature_extraction.text <span class="code-keyword">import</span> CountVectorizer
+vectorizer = CountVectorizer()
+bow_matrix = vectorizer.fit_transform(documents)</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h4 class="text-xl font-semibold text-gray-900 mb-4">TF-IDF</h4>
+                        <div class="code-block">
+                            <pre><code><span class="code-keyword">from</span> sklearn.feature_extraction.text <span class="code-keyword">import</span> TfidfVectorizer
+tfidf = TfidfVectorizer()
+tfidf_matrix = tfidf.fit_transform(documents)</code></pre>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-xl font-semibold text-gray-900 mb-4">N-grams</h4>
+                        <div class="code-block">
+                            <pre><code><span class="code-comment"># Capture phrase-level information</span>
+ngram_vectorizer = CountVectorizer(ngram_range=(1, 3))
+ngram_matrix = ngram_vectorizer.fit_transform(documents)</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Modern Approaches - Word Embeddings</h3>
+                    
+                    <div class="mb-8">
+                        <h4 class="text-xl font-semibold text-gray-900 mb-4">Pre-trained Embeddings:</h4>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <div class="w-3 h-3 bg-blue-500 rounded-full mt-2 mr-3"></div>
+                                <span><strong>Word2Vec:</strong> Google's neural word embeddings</span>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="w-3 h-3 bg-blue-500 rounded-full mt-2 mr-3"></div>
+                                <span><strong>GloVe:</strong> Stanford's global vector representations</span>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="w-3 h-3 bg-blue-500 rounded-full mt-2 mr-3"></div>
+                                <span><strong>FastText:</strong> Facebook's subword-aware embeddings</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="text-xl font-semibold text-gray-900 mb-4">Contextual Embeddings:</h4>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <div class="w-3 h-3 bg-purple-500 rounded-full mt-2 mr-3"></div>
+                                <span><strong>BERT:</strong> Bidirectional encoder representations</span>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="w-3 h-3 bg-purple-500 rounded-full mt-2 mr-3"></div>
+                                <span><strong>GPT:</strong> Generative pre-trained transformers</span>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="w-3 h-3 bg-purple-500 rounded-full mt-2 mr-3"></div>
+                                <span><strong>RoBERTa:</strong> Robustly optimized BERT approach</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-8">
+                        <img src="https://www.researchgate.net/publication/371952789/figure/fig3/AS:11431281176236116@1690077462414/Representation-of-various-stages-in-a-typical-NLP-pipeline.png" alt="Feature Engineering Approaches" class="rounded-lg w-full shadow-md">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Model Architecture -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="flex items-center mb-12">
+                <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mr-4">
+                    <ion-icon name="cog-outline" class="text-indigo-600 text-xl"></ion-icon>
+                </div>
+                <h2 class="text-4xl font-bold text-gray-900">4. Model Architecture & Selection</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Rule-Based -->
+                <div class="card bg-gradient-to-br from-blue-50 to-blue-100 p-8 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold text-blue-900 mb-6">Rule-Based/Heuristic Approaches</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <ion-icon name="code-outline" class="text-blue-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Regular Expressions:</strong> Pattern matching for specific tasks</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="book-outline" class="text-blue-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Lexicon-Based Analysis:</strong> Dictionary-based sentiment analysis</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="git-branch-outline" class="text-blue-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>WordNet:</strong> Semantic relationships and synonyms</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Traditional ML -->
+                <div class="card bg-gradient-to-br from-green-50 to-green-100 p-8 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold text-green-900 mb-6">Traditional Machine Learning</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <ion-icon name="flask-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Naive Bayes:</strong> Text classification, spam detection</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="shield-checkmark-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>SVM:</strong> Text classification, sentiment analysis</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="git-network-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>HMM:</strong> Sequence labeling, POS tagging</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="grid-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>CRF:</strong> Named entity recognition</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Deep Learning -->
+                <div class="card bg-gradient-to-br from-purple-50 to-purple-100 p-8 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold text-purple-900 mb-6">Deep Learning Approaches</h3>
+                    <h4 class="font-semibold text-purple-800 mb-3">Recurrent Neural Networks:</h4>
+                    <ul class="space-y-2 mb-4">
+                        <li class="flex items-start text-sm">
+                            <ion-icon name="refresh-outline" class="text-purple-500 mt-0.5 mr-1.5"></ion-icon>
+                            <span><strong>RNN:</strong> Basic sequence modeling</span>
+                        </li>
+                        <li class="flex items-start text-sm">
+                            <ion-icon name="timer-outline" class="text-purple-500 mt-0.5 mr-1.5"></ion-icon>
+                            <span><strong>LSTM:</strong> Long short-term memory for longer sequences</span>
+                        </li>
+                        <li class="flex items-start text-sm">
+                            <ion-icon name="git-merge-outline" class="text-purple-500 mt-0.5 mr-1.5"></ion-icon>
+                            <span><strong>GRU:</strong> Gated recurrent units for efficiency</span>
+                        </li>
+                    </ul>
+                    <h4 class="font-semibold text-purple-800 mb-3">Transformer-Based Models:</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-start text-sm">
+                            <ion-icon name="sync-outline" class="text-purple-500 mt-0.5 mr-1.5"></ion-icon>
+                            <span><strong>BERT:</strong> Bidirectional understanding</span>
+                        </li>
+                        <li class="flex items-start text-sm">
+                            <ion-icon name="sparkles-outline" class="text-purple-500 mt-0.5 mr-1.5"></ion-icon>
+                            <span><strong>GPT Series:</strong> Generative capabilities</span>
+                        </li>
+                        <li class="flex items-start text-sm">
+                            <ion-icon name="repeat-outline" class="text-purple-500 mt-0.5 mr-1.5"></ion-icon>
+                            <span><strong>T5:</strong> Text-to-text transfer transformer</span>
+                        </li>
+                        <li class="flex items-start text-sm">
+                            <ion-icon name="repeat-outline" class="text-purple-500 mt-0.5 mr-1.5"></ion-icon>
+                            <span><strong>RoBERTa, DeBERTa:</strong> Optimized BERT variants</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Cloud APIs -->
+            <div class="card bg-gradient-to-br from-gray-50 to-gray-100 p-8 rounded-xl shadow-lg mt-8">
+                <h3 class="text-xl font-bold text-gray-900 mb-6">Cloud APIs</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="flex items-center">
+                        <ion-icon name="logo-google" class="text-red-500 text-2xl mr-3"></ion-icon>
+                        <span><strong>Google Cloud Natural Language API</strong></span>
+                    </div>
+                    <div class="flex items-center">
+                        <ion-icon name="logo-microsoft" class="text-blue-500 text-2xl mr-3"></ion-icon>
+                        <span><strong>Microsoft Azure Text Analytics</strong></span>
+                    </div>
+                    <div class="flex items-center">
+                        <ion-icon name="logo-amazon" class="text-orange-500 text-2xl mr-3"></ion-icon>
+                        <span><strong>AWS Comprehend</strong></span>
+                    </div>
+                    <div class="flex items-center">
+                        <ion-icon name="logo-buffer" class="text-purple-500 text-2xl mr-3"></ion-icon>
+                        <span><strong>IBM Watson Natural Language Understanding</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Evaluation Metrics -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="flex items-center mb-12">
+                <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mr-4">
+                    <ion-icon name="analytics-outline" class="text-orange-600 text-xl"></ion-icon>
+                </div>
+                <h2 class="text-4xl font-bold text-gray-900">5. Evaluation Metrics</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Intrinsic Evaluation -->
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Intrinsic Evaluation (Technical Performance)</h3>
+                    
+                    <h4 class="text-xl font-semibold text-gray-900 mb-4">Classification Tasks:</h4>
+                    <div class="space-y-3 mb-8">
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <h5 class="font-bold text-blue-900">Accuracy</h5>
+                            <p class="text-gray-700">Overall correctness of predictions</p>
+                        </div>
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <h5 class="font-bold text-green-900">Precision</h5>
+                            <p class="text-gray-700">True positives / (True positives + False positives)</p>
+                        </div>
+                        <div class="p-4 bg-purple-50 rounded-lg">
+                            <h5 class="font-bold text-purple-900">Recall</h5>
+                            <p class="text-gray-700">True positives / (True positives + False negatives)</p>
+                        </div>
+                        <div class="p-4 bg-yellow-50 rounded-lg">
+                            <h5 class="font-bold text-yellow-900">F1-Score</h5>
+                            <p class="text-gray-700">Harmonic mean of precision and recall</p>
+                        </div>
+                        <div class="p-4 bg-red-50 rounded-lg">
+                            <h5 class="font-bold text-red-900">AUC-ROC</h5>
+                            <p class="text-gray-700">Area under the curve for binary classification</p>
+                        </div>
+                    </div>
+
+                    <h4 class="text-xl font-semibold text-gray-900 mb-4">Sequence Labeling:</h4>
+                    <div class="space-y-3 mb-8">
+                        <div class="p-4 bg-indigo-50 rounded-lg">
+                            <h5 class="font-bold text-indigo-900">Entity-level F1</h5>
+                            <p class="text-gray-700">For named entity recognition tasks</p>
+                        </div>
+                        <div class="p-4 bg-pink-50 rounded-lg">
+                            <h5 class="font-bold text-pink-900">Token-level Accuracy</h5>
+                            <p class="text-gray-700">For POS tagging and similar tasks</p>
+                        </div>
+                    </div>
+
+                    <h4 class="text-xl font-semibold text-gray-900 mb-4">Text Generation:</h4>
+                    <div class="space-y-3">
+                        <div class="p-4 bg-teal-50 rounded-lg">
+                            <h5 class="font-bold text-teal-900">BLEU</h5>
+                            <p class="text-gray-700">Bilingual evaluation understudy for translation quality</p>
+                        </div>
+                        <div class="p-4 bg-cyan-50 rounded-lg">
+                            <h5 class="font-bold text-cyan-900">ROUGE</h5>
+                            <p class="text-gray-700">Recall-oriented understudy for gisting evaluation</p>
+                        </div>
+                        <div class="p-4 bg-lime-50 rounded-lg">
+                            <h5 class="font-bold text-lime-900">Perplexity</h5>
+                            <p class="text-gray-700">Language model quality measure - lower is better</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Extrinsic Evaluation -->
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Extrinsic Evaluation (Real-world Impact)</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl">
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <ion-icon name="trending-up-outline" class="text-blue-600 text-xl"></ion-icon>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">Business Metrics</h4>
+                                <p class="text-gray-700">Measure ROI, user engagement, conversion rates, and other key performance indicators that demonstrate the business value of the NLP system.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <ion-icon name="clipboard-outline" class="text-green-600 text-xl"></ion-icon>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">Task-specific Metrics</h4>
+                                <p class="text-gray-700">Evaluate performance based on specific task outcomes such as customer satisfaction scores, support ticket resolution rates, or sales conversion improvements.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl">
+                            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <ion-icon name="people-outline" class="text-purple-600 text-xl"></ion-icon>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">User-centric Evaluation</h4>
+                                <p class="text-gray-700">Conduct usability testing, collect user feedback, perform A/B testing, and measure user satisfaction to ensure the system meets user needs and expectations.</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 p-6 bg-gradient-to-r from-orange-50 to-red-50 rounded-xl">
+                            <h4 class="text-xl font-bold text-gray-900 mb-4">Evaluation Framework</h4>
+                            <div class="space-y-3">
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 bg-orange-500 rounded-full mr-3"></div>
+                                    <span>Define clear evaluation objectives aligned with business goals</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 bg-orange-500 rounded-full mr-3"></div>
+                                    <span>Select appropriate metrics for each aspect of the system</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 bg-orange-500 rounded-full mr-3"></div>
+                                    <span>Establish baseline performance for comparison</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 bg-orange-500 rounded-full mr-3"></div>
+                                    <span>Implement continuous monitoring and periodic re-evaluation</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 bg-orange-500 rounded-full mr-3"></div>
+                                    <span>Create feedback loops for iterative improvement</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Deployment & Production -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="flex items-center mb-12">
+                <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mr-4">
+                    <ion-icon name="rocket-outline" class="text-red-600 text-xl"></ion-icon>
+                </div>
+                <h2 class="text-4xl font-bold text-gray-900">6. Deployment & Production</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <!-- Model Deployment -->
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Model Deployment</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl">
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <ion-icon name="cube-outline" class="text-blue-600 text-xl"></ion-icon>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">Container Orchestration</h4>
+                                <p class="text-gray-700">Use Docker for containerization and Kubernetes for orchestration to ensure scalability, reliability, and easy deployment across different environments.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <ion-icon name="server-outline" class="text-green-600 text-xl"></ion-icon>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">API Frameworks</h4>
+                                <p class="text-gray-700">Build RESTful APIs using FastAPI (recommended for performance), Flask (for simplicity), or Django REST framework (for complex applications) to expose your NLP models.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl">
+                            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <ion-icon name="flash-outline" class="text-purple-600 text-xl"></ion-icon>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">Model Serving</h4>
+                                <p class="text-gray-700">Utilize specialized model serving solutions like TensorFlow Serving for TensorFlow models, TorchServe for PyTorch models, or ONNX Runtime for cross-framework deployment.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start p-6 bg-gradient-to-r from-orange-50 to-red-50 rounded-xl">
+                            <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <ion-icon name="cloud-outline" class="text-orange-600 text-xl"></ion-icon>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">Cloud Platforms</h4>
+                                <p class="text-gray-700">Deploy on managed ML platforms like AWS SageMaker, Google AI Platform, or Azure ML for simplified infrastructure management, auto-scaling, and integrated monitoring.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monitoring & Maintenance -->
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Monitoring & Maintenance</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start p-6 bg-gradient-to-r from-teal-50 to-cyan-50 rounded-xl">
+                            <div class="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <ion-icon name="speedometer-outline" class="text-teal-600 text-xl"></ion-icon>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">Performance Monitoring</h4>
+                                <p class="text-gray-700">Track key metrics including latency (response time), throughput (requests per second), error rates, and accuracy drift over time to ensure consistent performance.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start p-6 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-xl">
+                            <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <ion-icon name="alert-circle-outline" class="text-yellow-600 text-xl"></ion-icon>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">Data Drift Detection</h4>
+                                <p class="text-gray-700">Implement systems to detect changes in input data distribution that could degrade model performance, including concept drift and feature drift.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start p-6 bg-gradient-to-r from-indigo-50 to-violet-50 rounded-xl">
+                            <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <ion-icon name="git-branch-outline" class="text-indigo-600 text-xl"></ion-icon>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">Model Versioning</h4>
+                                <p class="text-gray-700">Use ML lifecycle management tools like MLflow, Weights & Biases, or Neptune to track model versions, parameters, metrics, and artifacts for reproducibility.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start p-6 bg-gradient-to-r from-pink-50 to-rose-50 rounded-xl">
+                            <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <ion-icon name="git-compare-outline" class="text-pink-600 text-xl"></ion-icon>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">A/B Testing</h4>
+                                <p class="text-gray-700">Implement gradual rollout strategies and A/B testing to compare new model versions against baselines, ensuring improvements before full deployment.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Production Best Practices -->
+            <div class="card bg-gradient-to-br from-gray-900 to-gray-800 text-white p-12 rounded-2xl shadow-2xl">
+                <h2 class="text-3xl font-bold mb-8 text-center">Production Best Practices</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <div class="p-6 bg-white/10 rounded-xl backdrop-blur-sm border border-white/20">
+                            <h3 class="text-xl font-bold mb-3 flex items-center">
+                                <ion-icon name="resize-outline" class="text-blue-400 text-xl mr-2"></ion-icon>
+                                Scalability
+                            </h3>
+                            <ul class="space-y-2 text-gray-300">
+                                <li class="flex items-start">
+                                    <ion-icon name="play-outline" class="text-green-400 mt-1 mr-2"></ion-icon>
+                                    <span><strong>Batch Processing:</strong> Process multiple documents simultaneously</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <ion-icon name="git-network-outline" class="text-green-400 mt-1 mr-2"></ion-icon>
+                                    <span><strong>Parallel Processing:</strong> Utilize multiple CPU cores/GPUs</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <ion-icon name="time-outline" class="text-green-400 mt-1 mr-2"></ion-icon>
+                                    <span><strong>Caching:</strong> Store preprocessing results and model outputs</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <ion-icon name="swap-horizontal-outline" class="text-green-400 mt-1 mr-2"></ion-icon>
+                                    <span><strong>Load Balancing:</strong> Distribute requests across multiple instances</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="p-6 bg-white/10 rounded-xl backdrop-blur-sm border border-white/20">
+                            <h3 class="text-xl font-bold mb-3 flex items-center">
+                                <ion-icon name="security-outline" class="text-red-400 text-xl mr-2"></ion-icon>
+                                Security & Privacy
+                            </h3>
+                            <ul class="space-y-2 text-gray-300">
+                                <li class="flex items-start">
+                                    <ion-icon name="eye-off-outline" class="text-green-400 mt-1 mr-2"></ion-icon>
+                                    <span><strong>Data Anonymization:</strong> Remove or mask sensitive information</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <ion-icon name="lock-closed-outline" class="text-green-400 mt-1 mr-2"></ion-icon>
+                                    <span><strong>Secure APIs:</strong> Implement authentication and rate limiting</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <ion-icon name="document-text-outline" class="text-green-400 mt-1 mr-2"></ion-icon>
+                                    <span><strong>Compliance:</strong> GDPR, HIPAA, and other regulatory requirements</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <ion-icon name="book-outline" class="text-green-400 mt-1 mr-2"></ion-icon>
+                                    <span><strong>Audit Trails:</strong> Log all processing activities</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="p-6 bg-white/10 rounded-xl backdrop-blur-sm border border-white/20">
+                            <h3 class="text-xl font-bold mb-3 flex items-center">
+                                <ion-icon name="flash-outline" class="text-yellow-400 text-xl mr-2"></ion-icon>
+                                Performance Optimization
+                            </h3>
+                            <ul class="space-y-2 text-gray-300">
+                                <li class="flex items-start">
+                                    <ion-icon name="resize-outline" class="text-green-400 mt-1 mr-2"></ion-icon>
+                                    <span><strong>Model Quantization:</strong> Reduce model size while maintaining accuracy</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <ion-icon name="git-compare-outline" class="text-green-400 mt-1 mr-2"></ion-icon>
+                                    <span><strong>Knowledge Distillation:</strong> Train smaller models from larger ones</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <ion-icon name="speedometer-outline" class="text-green-400 mt-1 mr-2"></ion-icon>
+                                    <span><strong>Efficient Tokenization:</strong> Use fast tokenizers (HuggingFace tokenizers)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <ion-icon name="memory-outline" class="text-green-400 mt-1 mr-2"></ion-icon>
+                                    <span><strong>Memory Management:</strong> Optimize for large-scale processing</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="p-6 bg-white/10 rounded-xl backdrop-blur-sm border border-white/20">
+                            <h3 class="text-xl font-bold mb-3 flex items-center">
+                                <ion-icon name="sync-outline" class="text-purple-400 text-xl mr-2"></ion-icon>
+                                MLOps Integration
+                            </h3>
+                            <ul class="space-y-2 text-gray-300">
+                                <li class="flex items-start">
+                                    <ion-icon name="git-branch-outline" class="text-green-400 mt-1 mr-2"></ion-icon>
+                                    <span><strong>Version Control:</strong> Track data, code, and model versions</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <ion-icon name="flask-outline" class="text-green-400 mt-1 mr-2"></ion-icon>
+                                    <span><strong>Automated Testing:</strong> Unit tests, integration tests, model validation</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <ion-icon name="repeat-outline" class="text-green-400 mt-1 mr-2"></ion-icon>
+                                    <span><strong>Continuous Integration:</strong> Automated pipeline execution</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <ion-icon name="archive-outline" class="text-green-400 mt-1 mr-2"></ion-icon>
+                                    <span><strong>Model Registry:</strong> Centralized model management</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Implementation Frameworks -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center text-gray-900 mb-16">Implementation Frameworks & Tools</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <!-- spaCy -->
+                <div class="library-card card p-8 rounded-xl">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-white font-bold text-lg">s</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">spaCy</h3>
+                    </div>
+                    <p class="text-blue-100 mb-6">Production-Ready NLP with industrial-strength processing and built-in trained models.</p>
+                    
+                    <div class="code-block mb-6">
+                        <pre><code><span class="code-keyword">import</span> spacy
+<span class="code-comment"># Load pre-trained model</span>
+nlp = spacy.load(<span class="code-string">"en_core_web_sm"</span>)
+<span class="code-comment"># Process text</span>
+doc = nlp(<span class="code-string">"Apple Inc. is looking at buying U.K. startup for $1 billion"</span>)
+<span class="code-comment"># Extract entities, POS tags, dependencies</span>
+<span class="code-keyword">for</span> ent <span class="code-keyword">in</span> doc.ents:
+    <span class="code-keyword">print</span>(ent.text, ent.label_)</code></pre>
+                    </div>
+                    
+                    <h4 class="text-blue-100 font-semibold mb-3">Strengths:</h4>
+                    <ul class="text-blue-100 text-sm space-y-1">
+                        <li>• Fast and efficient for production</li>
+                        <li>• Industrial-strength processing</li>
+                        <li>• Built-in trained models</li>
+                        <li>• Easy integration with ML workflows</li>
+                    </ul>
+                </div>
+
+                <!-- NLTK -->
+                <div class="library-card card p-8 rounded-xl">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-white font-bold text-lg">N</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">NLTK</h3>
+                    </div>
+                    <p class="text-blue-100 mb-6">Educational & Research toolkit with comprehensive algorithms and datasets.</p>
+                    
+                    <div class="code-block mb-6">
+                        <pre><code><span class="code-keyword">import</span> nltk
+<span class="code-keyword">from</span> nltk.tokenize <span class="code-keyword">import</span> word_tokenize
+<span class="code-keyword">from</span> nltk.corpus <span class="code-keyword">import</span> stopwords
+<span class="code-keyword">from</span> nltk.stem <span class="code-keyword">import</span> PorterStemmer
+<span class="code-comment"># Download required data</span>
+nltk.download(<span class="code-string">'punkt'</span>)
+nltk.download(<span class="code-string">'stopwords'</span>)
+<span class="code-comment"># Basic preprocessing</span>
+tokens = word_tokenize(text)
+stop_words = <span class="code-keyword">set</span>(stopwords.words(<span class="code-string">'english'</span>))
+filtered_tokens = [w <span class="code-keyword">for</span> w <span class="code-keyword">in</span> tokens <span class="code-keyword">if</span> w.lower() <span class="code-keyword">not</span> <span class="code-keyword">in</span> stop_words]</code></pre>
+                    </div>
+                    
+                    <h4 class="text-blue-100 font-semibold mb-3">Strengths:</h4>
+                    <ul class="text-blue-100 text-sm space-y-1">
+                        <li>• Comprehensive toolkit for learning</li>
+                        <li>• Wide range of algorithms and datasets</li>
+                        <li>• Strong academic support</li>
+                        <li>• Extensive documentation</li>
+                    </ul>
+                </div>
+
+                <!-- Hugging Face -->
+                <div class="library-card card p-8 rounded-xl">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-white font-bold text-lg">H</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">Hugging Face</h3>
+                    </div>
+                    <p class="text-blue-100 mb-6">State-of-the-art models with access to latest transformers and easy fine-tuning.</p>
+                    
+                    <div class="code-block mb-6">
+                        <pre><code><span class="code-keyword">from</span> transformers <span class="code-keyword">import</span> pipeline, AutoTokenizer, AutoModel
+<span class="code-comment"># Pre-built pipelines</span>
+classifier = pipeline(<span class="code-string">"sentiment-analysis"</span>)
+result = classifier(<span class="code-string">"I love this NLP pipeline!"</span>)
+<span class="code-comment"># Custom model loading</span>
+tokenizer = AutoTokenizer.from_pretrained(<span class="code-string">"bert-base-uncased"</span>)
+model = AutoModel.from_pretrained(<span class="code-string">"bert-base-uncased"</span>)</code></pre>
+                    </div>
+                    
+                    <h4 class="text-blue-100 font-semibold mb-3">Strengths:</h4>
+                    <ul class="text-blue-100 text-sm space-y-1">
+                        <li>• Access to latest transformer models</li>
+                        <li>• Easy fine-tuning capabilities</li>
+                        <li>• Strong community and model hub</li>
+                        <li>• Production-ready implementations</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Modern Pipeline Architecture -->
+            <div class="card bg-white p-8 rounded-xl shadow-lg max-w-4xl mx-auto">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">Modern Pipeline Architecture</h3>
+                <div class="code-block">
+                    <pre><code><span class="code-comment"># Example comprehensive NLP pipeline</span>
+<span class="code-keyword">class</span> NLPPipeline:
+    <span class="code-keyword">def</span> __init__(self):
+        self.preprocessor = TextPreprocessor()
+        self.vectorizer = TfidfVectorizer()
+        self.model = BertForSequenceClassification()
+    
+    <span class="code-keyword">def</span> preprocess(self, text):
+        <span class="code-comment"># Clean and normalize text</span>
+        cleaned = self.preprocessor.clean(text)
+        <span class="code-comment"># Tokenize and vectorize</span>
+        features = self.vectorizer.transform([cleaned])
+        <span class="code-keyword">return</span> features
+    
+    <span class="code-keyword">def</span> predict(self, text):
+        features = self.preprocess(text)
+        prediction = self.model.predict(features)
+        <span class="code-keyword">return</span> prediction
+    
+    <span class="code-keyword">def</span> train(self, texts, labels):
+        processed_texts = [self.preprocess(text) <span class="code-keyword">for</span> text <span class="code-keyword">in</span> texts]
+        self.model.fit(processed_texts, labels)</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pipeline Variations -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center text-gray-900 mb-16">Pipeline Variations by Use Case</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Text Classification</h3>
+                    <div class="code-block text-sm">
+                        <pre><code>Raw Text → Preprocessing → Feature Extraction → Classification Model → Prediction</code></pre>
+                    </div>
+                </div>
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Named Entity Recognition</h3>
+                    <div class="code-block text-sm">
+                        <pre><code>Raw Text → Tokenization → POS Tagging → NER Model → Entity Extraction</code></pre>
+                    </div>
+                </div>
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Text Generation</h3>
+                    <div class="code-block text-sm">
+                        <pre><code>Prompt → Tokenization → Language Model → Token Generation → Text Decoding</code></pre>
+                    </div>
+                </div>
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Machine Translation</h3>
+                    <div class="code-block text-sm">
+                        <pre><code>Source Text → Tokenization → Encoder → Decoder → Target Text Generation</code></pre>
+                    </div>
+                </div>
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Question Answering</h3>
+                    <div class="code-block text-sm">
+                        <pre><code>Question + Context → Tokenization → BERT Model → Answer Span Extraction</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advanced Considerations -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center text-gray-900 mb-16">Advanced Considerations</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Multi-language Support -->
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                            <ion-icon name="globe-outline" class="text-blue-600 text-xl"></ion-icon>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900">Multi-language Support</h3>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <ion-icon name="search-outline" class="text-blue-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Language Detection:</strong> Identify input language automatically</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="git-branch-outline" class="text-blue-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Cross-lingual Models:</strong> mBERT, XLM-R for multiple languages</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="construct-outline" class="text-blue-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Language-specific Preprocessing:</strong> Different rules for different languages</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Domain Adaptation -->
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                            <ion-icon name="git-merge-outline" class="text-green-600 text-xl"></ion-icon>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900">Domain Adaptation</h3>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <ion-icon name="sync-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Fine-tuning:</strong> Adapt pre-trained models to specific domains</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="git-network-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Transfer Learning:</strong> Leverage knowledge from related tasks</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="help-circle-outline" class="text-green-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Active Learning:</strong> Iteratively improve with human feedback</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Real-time Processing -->
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+                            <ion-icon name="flash-outline" class="text-purple-600 text-xl"></ion-icon>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900">Real-time Processing</h3>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <ion-icon name="git-network-outline" class="text-purple-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Streaming Pipelines:</strong> Apache Kafka, Apache Storm</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="phone-portrait-outline" class="text-purple-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Edge Computing:</strong> Deploy models on mobile/edge devices</span>
+                        </li>
+                        <li class="flex items-start">
+                            <ion-icon name="speedometer-outline" class="text-purple-500 mt-1 mr-2"></ion-icon>
+                            <span><strong>Low-latency Serving:</strong> Optimize for real-time applications</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Future Trends -->
+    <section class="py-20 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-6">Future Trends (2024-2025)</h2>
+                <p class="text-xl text-indigo-100 max-w-3xl mx-auto">
+                    The NLP pipeline landscape continues to evolve rapidly with transformer models and large language models reshaping the field.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                <div class="card bg-white/10 backdrop-blur-sm p-8 rounded-xl border border-white/20">
+                    <div class="text-4xl mb-4">🚀</div>
+                    <h3 class="text-2xl font-bold mb-4">Large Language Models (LLMs)</h3>
+                    <p class="text-indigo-100">GPT-4, Claude, Gemini integration for enhanced capabilities and zero-shot learning.</p>
+                </div>
+                <div class="card bg-white/10 backdrop-blur-sm p-8 rounded-xl border border-white/20">
+                    <div class="text-4xl mb-4">🎨</div>
+                    <h3 class="text-2xl font-bold mb-4">Multimodal NLP</h3>
+                    <p class="text-indigo-100">Integration of text, vision, and audio processing for comprehensive understanding.</p>
+                </div>
+                <div class="card bg-white/10 backdrop-blur-sm p-8 rounded-xl border border-white/20">
+                    <div class="text-4xl mb-4">📱</div>
+                    <h3 class="text-2xl font-bold mb-4">Efficient Architectures</h3>
+                    <p class="text-indigo-100">MobileBERT, DistilBERT for edge deployment and low-resource environments.</p>
+                </div>
+                <div class="card bg-white/10 backdrop-blur-sm p-8 rounded-xl border border-white/20">
+                    <div class="text-4xl mb-4">🎯</div>
+                    <h3 class="text-2xl font-bold mb-4">Zero-shot Learning</h3>
+                    <p class="text-indigo-100">Models that work without task-specific training, adapting to new domains instantly.</p>
+                </div>
+                <div class="card bg-white/10 backdrop-blur-sm p-8 rounded-xl border border-white/20">
+                    <div class="text-4xl mb-4">🔒</div>
+                    <h3 class="text-2xl font-bold mb-4">Federated Learning</h3>
+                    <p class="text-indigo-100">Privacy-preserving distributed training across multiple devices and locations.</p>
+                </div>
+            </div>
+
+            <div class="card bg-white/10 backdrop-blur-sm p-12 rounded-2xl border border-white/20">
+                <h2 class="text-3xl font-bold mb-8 text-center">Key Takeaways</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-0.5">
+                                <ion-icon name="play-outline" class="text-white"></ion-icon>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold">Start Simple</h3>
+                                <p class="text-indigo-100">Begin with rule-based approaches, then progress to ML/DL as needed.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-0.5">
+                                <ion-icon name="heart-outline" class="text-white"></ion-icon>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold">Focus on Data Quality</h3>
+                                <p class="text-indigo-100">Clean, relevant data is more important than complex models.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-0.5">
+                                <ion-icon name="build-outline" class="text-white"></ion-icon>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold">Choose the Right Tool</h3>
+                                <p class="text-indigo-100">spaCy for production, NLTK for learning, Transformers for SOTA.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-0.5">
+                                <ion-icon name="eye-outline" class="text-white"></ion-icon>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold">Monitor Continuously</h3>
+                                <p class="text-indigo-100">Track performance and adapt to changing data distributions.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mr-4 flex-shrink-0 mt-0.5">
+                                <ion-icon name="resize-outline" class="text-white"></ion-icon>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold">Plan for Scale</h3>
+                                <p class="text-indigo-100">Design with production requirements in mind from the beginning.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold mb-4">Comprehensive NLP Pipeline Guide</h2>
+                <p class="text-gray-400 mb-8">Based on the latest research and industry practices from 2024-2025</p>
+                
+                <div class="border-t border-gray-800 pt-8">
+                    <h3 class="text-lg font-semibold mb-4">Sources:</h3>
+                    <ul class="text-gray-400 space-y-2">
+                        <li><a href="https://medium.com/@asjad_ali/understanding-the-nlp-pipeline-a-comprehensive-guide-828b2b3cd4e2" class="hover:text-white transition duration-300">Understanding the NLP Pipeline: A Comprehensive Guide</a></li>
+                        <li><a href="https://www.geeksforgeeks.org/natural-language-processing-nlp-pipeline/" class="hover:text-white transition duration-300">Natural Language Processing (NLP) Pipeline - GeeksforGeeks</a></li>
+                        <li><a href="https://medium.com/@tyagi.lekhansh/data-science-frameworks-for-natural-language-processing-spacy-vs-nltk-vs-hugging-face-d532ef06bfa3" class="hover:text-white transition duration-300">SpaCy vs. NLTK vs. Hugging Face Comparison</a></li>
+                    </ul>
+                </div>
+                
+                <div class="mt-8 pt-8 border-t border-gray-800">
+                    <p class="text-gray-500">© 2025 NLP Pipeline Guide. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Add smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add animation to code blocks
+        document.querySelectorAll('.code-block').forEach((block, index) => {
+            block.style.opacity = '0';
+            block.style.transform = 'translateY(20px)';
+            block.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            
+            setTimeout(() => {
+                block.style.opacity = '1';
+                block.style.transform = 'translateY(0)';
+            }, 200 * index);
+        });
+
+        // Add hover effect to cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.card, .metric-card, .pipeline-step').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
