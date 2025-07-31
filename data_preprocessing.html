@@ -1,9 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Preprocessing Explained</title>
+    <title>Data Preprocessing Pipeline</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -27,10 +28,6 @@
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-        }
-        
-        .step-card {
-            border-left: 4px solid #667eea;
         }
         
         .pipeline-step {
@@ -86,25 +83,41 @@
             100% { transform: translateY(0px); }
         }
         
-        .chart-container {
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            color: #667eea;
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .code-comment {
+            color: #60a5fa;
+        }
+        
+        .code-keyword {
+            color: #fbbf24;
+        }
+        
+        .code-string {
+            color: #86efac;
+        }
+        
+        .code-function {
+            color: #f9a8d4;
+        }
+        
+        .technique-card {
+            border-left: 4px solid #667eea;
         }
         
         .comparison-table td, .comparison-table th {
             padding: 12px 15px;
             text-align: left;
             border-bottom: 1px solid #eee;
-        }
-        
-        .highlight {
-            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
-            border-radius: 8px;
-            padding: 3px 8px;
         }
     </style>
 </head>
@@ -117,242 +130,344 @@
                     <i class="fas fa-database"></i>
                 </div>
             </div>
-            <h1 class="text-5xl font-bold text-white mb-4">Data Preprocessing Explained</h1>
+            <h1 class="text-5xl font-bold text-white mb-4">Data Preprocessing Pipeline</h1>
             <p class="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
-                The essential process of transforming raw data into a clean, structured format for machine learning and analysis
+                Complete Text Preprocessing Pipeline with Real Code Implementation
             </p>
         </div>
 
-        <!-- The Problem Section -->
-        <div class="grid lg:grid-cols-2 gap-8 mb-16">
-            <div class="card p-8">
-                <div class="icon-circle bg-red-100 text-red-600 mb-6">
-                    <i class="fas fa-exclamation-triangle"></i>
-                </div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">The Problem: Raw Data is Messy</h2>
-                <p class="text-gray-600 mb-6">Real-world data is often incomplete, inconsistent, and full of errors:</p>
-                <ul class="space-y-3 text-gray-700">
-                    <li class="flex items-start">
-                        <i class="fas fa-times-circle text-red-500 mt-1 mr-3"></i>
-                        <span><strong>Missing Values:</strong> Empty fields (e.g., age not provided)</span>
-                    </li>
-                    <li class="flex items-start">
-                        <i class="fas fa-times-circle text-red-500 mt-1 mr-3"></i>
-                        <span><strong>Noisy Data:</strong> Incorrect or corrupt values (e.g., age=200)</span>
-                    </li>
-                    <li class="flex items-start">
-                        <i class="fas fa-times-circle text-red-500 mt-1 mr-3"></i>
-                        <span><strong>Inconsistent Formats:</strong> Different date formats, spelling errors</span>
-                    </li>
-                    <li class="flex items-start">
-                        <i class="fas fa-times-circle text-red-500 mt-1 mr-3"></i>
-                        <span><strong>Outliers:</strong> Extreme values that don't fit the pattern</span>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="card p-8">
-                <div class="icon-circle bg-green-100 text-green-600 mb-6">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">The Solution: Clean & Prepared Data</h2>
-                <p class="text-gray-600 mb-6">Processed data is clean, consistent, and ready for analysis:</p>
-                <ul class="space-y-3 text-gray-700">
-                    <li class="flex items-start">
-                        <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
-                        <span><strong>Complete:</strong> Missing values handled appropriately</span>
-                    </li>
-                    <li class="flex items-start">
-                        <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
-                        <span><strong>Consistent:</strong> Uniform formats and standards</span>
-                    </li>
-                    <li class="flex items-start">
-                        <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
-                        <span><strong>Standardized:</strong> Proper scaling and encoding</span>
-                    </li>
-                    <li class="flex items-start">
-                        <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
-                        <span><strong>Ready:</strong> Perfect for machine learning algorithms</span>
-                    </li>
-                </ul>
-                <div class="mt-6 p-4 bg-blue-50 rounded-lg">
-                    <p class="text-sm text-blue-800 font-semibold">
-                        <i class="fas fa-lightbulb mr-2"></i>
-                        <strong>Remember:</strong> Garbage In = Garbage Out (GIGO)
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- The Pipeline -->
+        <!-- The Pipeline with Code -->
         <div class="card p-8 mb-16">
-            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">The Data Preprocessing Pipeline</h2>
-            <div class="max-w-4xl mx-auto relative">
-                <div class="pipeline-step">
-                    <div class="icon-circle bg-purple-100 text-purple-600 mb-4">
-                        <i class="fas fa-database"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 text-center mb-2">1. Data Collection</h3>
-                    <p class="text-gray-600 text-center">Gather data from databases, files, APIs, and other sources</p>
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Text Data Preprocessing Pipeline</h2>
+            
+            <!-- Step 1: Lowercase Conversion -->
+            <div class="pipeline-step mb-8">
+                <div class="icon-circle bg-purple-100 text-purple-600 mb-4">
+                    <i class="fas fa-font"></i>
                 </div>
-                
-                <div class="pipeline-step">
-                    <div class="icon-circle bg-red-100 text-red-600 mb-4">
-                        <i class="fas fa-broom"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 text-center mb-2">2. Data Cleaning</h3>
-                    <p class="text-gray-600 text-center">Handle missing values, remove duplicates, fix errors</p>
-                </div>
-                
-                <div class="pipeline-step">
-                    <div class="icon-circle bg-yellow-100 text-yellow-600 mb-4">
-                        <i class="fas fa-recycle"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 text-center mb-2">3. Data Transformation</h3>
-                    <p class="text-gray-600 text-center">Normalize, scale, encode categorical variables</p>
-                </div>
-                
-                <div class="pipeline-step">
-                    <div class="icon-circle bg-green-100 text-green-600 mb-4">
-                        <i class="fas fa-cogs"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 text-center mb-2">4. Feature Engineering</h3>
-                    <p class="text-gray-600 text-center">Create new features from existing data (e.g., BMI from height/weight)</p>
-                </div>
-                
-                <div class="pipeline-step">
-                    <div class="icon-circle bg-blue-100 text-blue-600 mb-4">
-                        <i class="fas fa-cut"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 text-center mb-2">5. Data Splitting</h3>
-                    <p class="text-gray-600 text-center">Split into training (80%) and testing (20%) sets</p>
+                <h3 class="text-xl font-bold text-gray-800 text-center mb-4">1. Convert to Lowercase</h3>
+                <p class="text-gray-600 text-center mb-4">Standardize text by converting all characters to lowercase</p>
+                <div class="code-block">
+                    <div class="code-comment"># Convert text to lowercase</div>
+                    <div class="code-keyword">def</div> <span class="code-function">convert_to_lowercase</span>(text):
+                    <div class="ml-4">return text.lower()</div>
+                    
+                    <div class="code-comment"># Apply to DataFrame</div>
+                    df['review'] = df['review'].apply(convert_to_lowercase)
                 </div>
             </div>
-        </div>
-
-        <!-- Step-by-Step Details -->
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            <!-- Step 1 -->
-            <div class="card step-card p-6">
+            
+            <!-- Step 2: Remove HTML Tags -->
+            <div class="pipeline-step mb-8">
                 <div class="icon-circle bg-red-100 text-red-600 mb-4">
-                    <i class="fas fa-broom"></i>
+                    <i class="fas fa-code"></i>
                 </div>
-                <h3 class="text-xl font-bold text-gray-800 mb-4">Data Cleaning</h3>
-                <div class="space-y-3">
-                    <div class="flex items-center">
-                        <i class="fas fa-minus-circle text-red-500 mr-2"></i>
-                        <span class="text-sm">Remove duplicates</span>
-                    </div>
-                    <div class="flex items-center">
-                        <i class="fas fa-question-circle text-yellow-500 mr-2"></i>
-                        <span class="text-sm">Handle missing values</span>
-                    </div>
-                    <div class="flex items-center">
-                        <i class="fas fa-exclamation-triangle text-orange-500 mr-2"></i>
-                        <span class="text-sm">Detect and handle outliers</span>
-                    </div>
-                    <div class="flex items-center">
-                        <i class="fas fa-align-left text-blue-500 mr-2"></i>
-                        <span class="text-sm">Fix inconsistent formats</span>
-                    </div>
+                <h3 class="text-xl font-bold text-gray-800 text-center mb-4">2. Remove HTML Tags</h3>
+                <p class="text-gray-600 text-center mb-4">Clean text by removing HTML markup and tags</p>
+                <div class="code-block">
+                    <div class="code-comment"># Remove HTML tags using regex</div>
+                    <div class="code-keyword">import</div> re
+                    
+                    <div class="code-keyword">def</div> <span class="code-function">remove_html_tags</span>(text):
+                    <div class="ml-4">pattern = re.compile('<.*?>')</div>
+                    <div class="ml-4">return pattern.sub(r'', text)</div>
+                    
+                    <div class="code-comment"># Apply to DataFrame</div>
+                    df['review'] = df['review'].apply(remove_html_tags)
                 </div>
             </div>
-
-            <!-- Step 2 -->
-            <div class="card step-card p-6">
+            
+            <!-- Step 3: Remove URLs -->
+            <div class="pipeline-step mb-8">
                 <div class="icon-circle bg-yellow-100 text-yellow-600 mb-4">
-                    <i class="fas fa-recycle"></i>
+                    <i class="fas fa-link"></i>
                 </div>
-                <h3 class="text-xl font-bold text-gray-800 mb-4">Data Transformation</h3>
-                <div class="space-y-3">
-                    <div class="flex items-center">
-                        <span class="badge bg-yellow-100 text-yellow-800 mr-2">Norm</span>
-                        <span class="text-sm">Normalization (0-1 scale)</span>
-                    </div>
-                    <div class="flex items-center">
-                        <span class="badge bg-yellow-100 text-yellow-800 mr-2">Std</span>
-                        <span class="text-sm">Standardization (Z-score)</span>
-                    </div>
-                    <div class="flex items-center">
-                        <span class="badge bg-yellow-100 text-yellow-800 mr-2">Enc</span>
-                        <span class="text-sm">One-Hot Encoding</span>
-                    </div>
-                    <div class="flex items-center">
-                        <span class="badge bg-yellow-100 text-yellow-800 mr-2">Lbl</span>
-                        <span class="text-sm">Label Encoding</span>
-                    </div>
+                <h3 class="text-xl font-bold text-gray-800 text-center mb-4">3. Remove URLs</h3>
+                <p class="text-gray-600 text-center mb-4">Eliminate web links and URLs from text data</p>
+                <div class="code-block">
+                    <div class="code-comment"># Remove URLs (http/https/www)</div>
+                    <div class="code-keyword">def</div> <span class="code-function">remove_url</span>(text):
+                    <div class="ml-4">pattern = re.compile(r'https?://\\S+|www\\.\\S+')</div>
+                    <div class="ml-4">return pattern.sub(r'', text)</div>
+                    
+                    <div class="code-comment"># Example usage</div>
+                    text = "Check out my website https://www.example.com"
+                    cleaned_text = remove_url(text)
                 </div>
             </div>
-
-            <!-- Step 3 -->
-            <div class="card step-card p-6">
+            
+            <!-- Step 4: Remove Punctuation -->
+            <div class="pipeline-step mb-8">
                 <div class="icon-circle bg-green-100 text-green-600 mb-4">
-                    <i class="fas fa-cogs"></i>
+                    <i class="fas fa-exclamation"></i>
                 </div>
-                <h3 class="text-xl font-bold text-gray-800 mb-4">Feature Engineering</h3>
-                <div class="space-y-3">
-                    <div class="flex items-center">
-                        <i class="fas fa-plus text-green-500 mr-2"></i>
-                        <span class="text-sm">Create new features</span>
-                    </div>
-                    <div class="flex items-center">
-                        <i class="fas fa-calculator text-green-500 mr-2"></i>
-                        <span class="text-sm">Mathematical transformations</span>
-                    </div>
-                    <div class="flex items-center">
-                        <i class="fas fa-brain text-green-500 mr-2"></i>
-                        <span class="text-sm">Domain knowledge application</span>
-                    </div>
-                    <div class="flex items-center">
-                        <i class="fas fa-compress-arrows-alt text-green-500 mr-2"></i>
-                        <span class="text-sm">Feature reduction</span>
-                    </div>
+                <h3 class="text-xl font-bold text-gray-800 text-center mb-4">4. Remove Punctuation</h3>
+                <p class="text-gray-600 text-center mb-4">Strip punctuation marks and special characters</p>
+                <div class="code-block">
+                    <div class="code-keyword">import</div> string
+                    
+                    exclude = string.punctuation
+                    
+                    <div class="code-keyword">def</div> <span class="code-function">remove_punc</span>(text):
+                    <div class="ml-4">return text.translate(str.maketrans('', '', exclude))</div>
+                    
+                    <div class="code-comment"># Alternative regex method</div>
+                    <div class="code-keyword">def</div> <span class="code-function">remove_punctuation_regex</span>(text):
+                    <div class="ml-4">return re.sub(r'[^\w\s]', '', text)</div>
+                </div>
+            </div>
+            
+            <!-- Step 5: Handle Chat Words -->
+            <div class="pipeline-step mb-8">
+                <div class="icon-circle bg-blue-100 text-blue-600 mb-4">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 text-center mb-4">5. Expand Chat Words</h3>
+                <p class="text-gray-600 text-center mb-4">Convert abbreviations and chat slang to full words</p>
+                <div class="code-block">
+                    <div class="code-comment"># Dictionary of common chat abbreviations</div>
+                    chat_words = {
+                        'AFAIK': 'As Far As I Know',
+                        'AFK': 'Away From Keyboard', 
+                        'ASAP': 'As Soon As Possible',
+                        'FYI': 'For Your Information'
+                    }
+                    
+                    <div class="code-keyword">def</div> <span class="code-function">chat_conversion</span>(text):
+                    <div class="ml-4">new_text = []</div>
+                    <div class="ml-4"><div class="code-keyword">for</div> word <div class="code-keyword">in</div> text.split():</div>
+                    <div class="ml-8"><div class="code-keyword">if</div> word.upper() <div class="code-keyword">in</div> chat_words:</div>
+                    <div class="ml-12">new_text.append(chat_words[word.upper()])</div>
+                    <div class="ml-8"><div class="code-keyword">else</div>:</div>
+                    <div class="ml-12">new_text.append(word)</div>
+                    <div class="ml-4">return " ".join(new_text)</div>
+                </div>
+            </div>
+            
+            <!-- Step 6: Correct Spelling -->
+            <div class="pipeline-step mb-8">
+                <div class="icon-circle bg-indigo-100 text-indigo-600 mb-4">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 text-center mb-4">6. Correct Spelling</h3>
+                <p class="text-gray-600 text-center mb-4">Fix spelling errors and typos in the text</p>
+                <div class="code-block">
+                    <div class="code-keyword">from</div> textblob <div class="code-keyword">import</div> TextBlob
+                    
+                    <div class="code-keyword">def</div> <span class="code-function">correct_spelling</span>(text):
+                    <div class="ml-4">textBlb = TextBlob(text)</div>
+                    <div class="ml-4">return str(textBlb.correct())</div>
+                    
+                    <div class="code-comment"># Example</div>
+                    incorrect_text = "ceertain conditionas duriing seveal ggenerations"
+                    corrected = correct_spelling(incorrect_text)
+                </div>
+            </div>
+            
+            <!-- Step 7: Tokenization -->
+            <div class="pipeline-step mb-8">
+                <div class="icon-circle bg-pink-100 text-pink-600 mb-4">
+                    <i class="fas fa-cut"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 text-center mb-4">7. Tokenization</h3>
+                <p class="text-gray-600 text-center mb-4">Split text into individual words or tokens</p>
+                <div class="code-block">
+                    <div class="code-keyword">from</div> nltk.tokenize <div class="code-keyword">import</div> word_tokenize
+                    
+                    <div class="code-comment"># Tokenize a sentence</div>
+                    sentence = "I am going to visit Delhi!"
+                    tokens = word_tokenize(sentence)
+                    print(tokens)  <div class="code-comment"># ['I', 'am', 'going', 'to', 'visit', 'Delhi', '!']</div>
+                    
+                    <div class="code-comment"># Apply to DataFrame</div>
+                    df['tokens'] = df['review'].apply(word_tokenize)
+                </div>
+            </div>
+            
+            <!-- Step 8: Remove Stopwords -->
+            <div class="pipeline-step mb-8">
+                <div class="icon-circle bg-orange-100 text-orange-600 mb-4">
+                    <i class="fas fa-trash"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 text-center mb-4">8. Remove Stopwords</h3>
+                <p class="text-gray-600 text-center mb-4">Eliminate common words that don't add much meaning</p>
+                <div class="code-block">
+                    <div class="code-keyword">from</div> nltk.corpus <div class="code-keyword">import</div> stopwords
+                    nltk.download('stopwords')
+                    
+                    stop_words = set(stopwords.words('english'))
+                    
+                    <div class="code-keyword">def</div> <span class="code-function">remove_stopwords</span>(text):
+                    <div class="ml-4">return [word <div class="code-keyword">for</div> word <div class="code-keyword">in</div> text <div class="code-keyword">if</div> word.lower() <div class="code-keyword">not in</div> stop_words]</div>
+                    
+                    <div class="code-comment"># Example</div>
+                    tokens = ['I', 'am', 'going', 'to', 'visit', 'Delhi']
+                    filtered = remove_stopwords(tokens)  <div class="code-comment"># ['going', 'visit', 'Delhi']</div>
+                </div>
+            </div>
+            
+            <!-- Step 9: Stemming -->
+            <div class="pipeline-step mb-8">
+                <div class="icon-circle bg-teal-100 text-teal-600 mb-4">
+                    <i class="fas fa-roots"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 text-center mb-4">9. Stemming</h3>
+                <p class="text-gray-600 text-center mb-4">Reduce words to their root form (fast but less accurate)</p>
+                <div class="code-block">
+                    <div class="code-keyword">from</div> nltk.stem <div class="code-keyword">import</div> PorterStemmer
+                    
+                    stemmer = PorterStemmer()
+                    
+                    <div class="code-keyword">def</div> <span class="code-function">stem_words</span>(text):
+                    <div class="ml-4">return [stemmer.stem(word) <div class="code-keyword">for</div> word <div class="code-keyword">in</div> text]</div>
+                    
+                    <div class="code-comment"># Example</div>
+                    words = ['running', 'runner', 'runs', 'ran']
+                    stemmed = stem_words(words)  <div class="code-comment"># ['run', 'runner', 'run', 'ran']</div>
+                </div>
+            </div>
+            
+            <!-- Step 10: Lemmatization -->
+            <div class="pipeline-step">
+                <div class="icon-circle bg-emerald-100 text-emerald-600 mb-4">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 text-center mb-4">10. Lemmatization</h3>
+                <p class="text-gray-600 text-center mb-4">Reduce words to their dictionary form (slower but more accurate)</p>
+                <div class="code-block">
+                    <div class="code-keyword">from</div> nltk.stem <div class="code-keyword">import</div> WordNetLemmatizer
+                    
+                    lemmatizer = WordNetLemmatizer()
+                    
+                    <div class="code-keyword">def</div> <span class="code-function">lemmatize_words</span>(text):
+                    <div class="ml-4">return [lemmatizer.lemmatize(word, pos='v') <div class="code-keyword">for</div> word <div class="code-keyword">in</div> text]</div>
+                    
+                    <div class="code-comment"># Example comparison</div>
+                    words = ['better', 'mice', 'geese', 'feet']
+                    <div class="code-comment"># Stemming: ['better', 'mic', 'gees', 'feet']</div>
+                    <div class="code-comment"># Lemmatization: ['better', 'mouse', 'goose', 'foot']</div>
                 </div>
             </div>
         </div>
 
-        <!-- Comparison Table -->
+        <!-- Complete Pipeline Code -->
         <div class="card p-8 mb-16">
-            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Before vs After Preprocessing</h2>
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Complete Preprocessing Pipeline</h2>
+            <div class="code-block">
+                <div class="code-comment"># Complete text preprocessing pipeline</div>
+                <div class="code-keyword">import</div> pandas <div class="code-keyword">as</div> pd
+                <div class="code-keyword">import</div> re
+                <div class="code-keyword">import</div> nltk
+                <div class="code-keyword">from</div> nltk.tokenize <div class="code-keyword">import</div> word_tokenize
+                <div class="code-keyword">from</div> nltk.corpus <div class="code-keyword">import</div> stopwords
+                <div class="code-keyword">from</div> nltk.stem <div class="code-keyword">import</div> PorterStemmer, WordNetLemmatizer
+                <div class="code-keyword">from</div> textblob <div class="code-keyword">import</div> TextBlob
+                
+                <div class="code-comment"># Download required NLTK data</div>
+                nltk.download('punkt')
+                nltk.download('stopwords')
+                nltk.download('wordnet')
+                
+                <div class="code-comment"># Initialize tools</div>
+                stemmer = PorterStemmer()
+                lemmatizer = WordNetLemmatizer()
+                stop_words = set(stopwords.words('english'))
+                
+                <div class="code-keyword">def</div> <span class="code-function">complete_preprocessing_pipeline</span>(text):
+                <div class="ml-4"> <div class="code-comment"># 1. Convert to lowercase</div></div>
+                <div class="ml-4">text = text.lower()</div>
+                
+                <div class="ml-4"> <div class="code-comment"># 2. Remove HTML tags</div></div>
+                <div class="ml-4">text = re.sub(r'<.*?>', '', text)</div>
+                
+                <div class="ml-4"> <div class="code-comment"># 3. Remove URLs</div></div>
+                <div class="ml-4">text = re.sub(r'https?://\\S+|www\\.\\S+', '', text)</div>
+                
+                <div class="ml-4"> <div class="code-comment"># 4. Remove punctuation</div></div>
+                <div class="ml-4">text = re.sub(r'[^\w\s]', '', text)</div>
+                
+                <div class="ml-4"> <div class="code-comment"># 5. Correct spelling</div></div>
+                <div class="ml-4">textBlb = TextBlob(text)</div>
+                <div class="ml-4">text = str(textBlb.correct())</div>
+                
+                <div class="ml-4"> <div class="code-comment"># 6. Tokenize</div></div>
+                <div class="ml-4">tokens = word_tokenize(text)</div>
+                
+                <div class="ml-4"> <div class="code-comment"># 7. Remove stopwords</div></div>
+                <div class="ml-4">tokens = [word <div class="code-keyword">for</div> word <div class="code-keyword">in</div> tokens <div class="code-keyword">if</div> word <div class="code-keyword">not in</div> stop_words]</div>
+                
+                <div class="ml-4"> <div class="code-comment"># 8. Lemmatize</div></div>
+                <div class="ml-4">tokens = [lemmatizer.lemmatize(word, pos='v') <div class="code-keyword">for</div> word <div class="code-keyword">in</div> tokens]</div>
+                
+                <div class="ml-4"> <div class="code-comment"># 9. Join back to text</div></div>
+                <div class="ml-4">return ' '.join(tokens)</div>
+                
+                <div class="code-comment"># Apply to DataFrame</div>
+                df['cleaned_review'] = df['review'].apply(complete_preprocessing_pipeline)
+            </div>
+        </div>
+
+        <!-- Techniques Comparison -->
+        <div class="card p-8 mb-16">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Text Preprocessing Techniques Comparison</h2>
             <div class="overflow-x-auto">
                 <table class="w-full comparison-table">
                     <thead>
                         <tr class="bg-gray-50">
-                            <th class="text-left font-bold text-gray-800">Aspect</th>
-                            <th class="text-left font-bold text-gray-800">Before Preprocessing</th>
-                            <th class="text-left font-bold text-gray-800">After Preprocessing</th>
+                            <th class="text-left font-bold text-gray-800">Technique</th>
+                            <th class="text-left font-bold text-gray-800">Purpose</th>
+                            <th class="text-left font-bold text-gray-800">Example</th>
+                            <th class="text-left font-bold text-gray-800">Library Used</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="font-semibold text-gray-700">Missing Values</td>
-                            <td class="text-red-600">Empty cells, NaN values</td>
-                            <td class="text-green-600">Filled with mean/median or removed</td>
+                            <td class="font-semibold text-gray-700">Lowercasing</td>
+                            <td>Standardize text format</td>
+                            <td>"Hello" → "hello"</td>
+                            <td>Python built-in</td>
                         </tr>
                         <tr>
-                            <td class="font-semibold text-gray-700">Data Types</td>
-                            <td class="text-red-600">Mixed formats, inconsistent</td>
-                            <td class="text-green-600">Consistent and standardized</td>
+                            <td class="font-semibold text-gray-700">HTML Removal</td>
+                            <td>Remove markup tags</td>
+                            <td>"&lt;p&gt;Text&lt;/p&gt;" → "Text"</td>
+                            <td>re (regex)</td>
                         </tr>
                         <tr>
-                            <td class="font-semibold text-gray-700">Scale</td>
-                            <td class="text-red-600">Different ranges (0-1000, 0-1)</td>
-                            <td class="text-green-600">Normalized or standardized</td>
+                            <td class="font-semibold text-gray-700">URL Removal</td>
+                            <td>Remove web links</td>
+                            <td>"Visit https://site.com" → "Visit"</td>
+                            <td>re (regex)</td>
                         </tr>
                         <tr>
-                            <td class="font-semibold text-gray-700">Categorical Data</td>
-                            <td class="text-red-600">Text labels (Red, Blue, Green)</td>
-                            <td class="text-green-600">Encoded as numbers (One-Hot)</td>
+                            <td class="font-semibold text-gray-700">Punctuation Removal</td>
+                            <td>Remove special characters</td>
+                            <td>"Hello!" → "Hello"</td>
+                            <td>string, re</td>
                         </tr>
                         <tr>
-                            <td class="font-semibold text-gray-700">Outliers</td>
-                            <td class="text-red-600">Extreme values present</td>
-                            <td class="text-green-600">Detected and handled</td>
+                            <td class="font-semibold text-gray-700">Stopword Removal</td>
+                            <td>Remove common words</td>
+                            <td>"the cat sat" → "cat sat"</td>
+                            <td>NLTK</td>
                         </tr>
                         <tr>
-                            <td class="font-semibold text-gray-700">Duplicates</td>
-                            <td class="text-red-600">Repeated entries</td>
-                            <td class="text-green-600">Removed</td>
+                            <td class="font-semibold text-gray-700">Stemming</td>
+                            <td>Reduce to root form (fast)</td>
+                            <td>"running" → "run"</td>
+                            <td>NLTK</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold text-gray-700">Lemmatization</td>
+                            <td>Reduce to dictionary form (accurate)</td>
+                            <td>"better" → "good"</td>
+                            <td>NLTK</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold text-gray-700">Spelling Correction</td>
+                            <td>Fix typos</td>
+                            <td>"recieve" → "receive"</td>
+                            <td>TextBlob</td>
                         </tr>
                     </tbody>
                 </table>
@@ -364,32 +479,33 @@
             <div class="icon-circle bg-blue-100 text-blue-600 mb-6 mx-auto w-20 h-20">
                 <i class="fas fa-rocket text-3xl"></i>
             </div>
-            <h2 class="text-3xl font-bold text-gray-800 mb-6">Why Data Preprocessing Matters</h2>
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Why Text Preprocessing Matters</h2>
             <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
                 <div class="p-6">
-                    <div class="text-4xl font-bold text-green-600 mb-2">↑ 30-70%</div>
-                    <p class="text-gray-700">Improvement in model accuracy</p>
+                    <div class="text-4xl font-bold text-green-600 mb-2">↑ 40-80%</div>
+                    <p class="text-gray-700">Improvement in NLP model accuracy</p>
                 </div>
                 <div class="p-6">
-                    <div class="text-4xl font-bold text-blue-600 mb-2">↓ 50%</div>
-                    <p class="text-gray-700">Reduction in training time</p>
+                    <div class="text-4xl font-bold text-blue-600 mb-2">↓ 60%</div>
+                    <p class="text-gray-700">Reduction in noise and irrelevant data</p>
                 </div>
                 <div class="p-6">
-                    <div class="text-4xl font-bold text-purple-600 mb-2">↑ 90%</div>
-                    <p class="text-gray-700">Reliability of predictions</p>
+                    <div class="text-4xl font-bold text-purple-600 mb-2">↑ 95%</div>
+                    <p class="text-gray-700">Consistency in text representation</p>
                 </div>
             </div>
             <div class="mt-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl">
                 <p class="text-xl text-gray-800 font-semibold">
-                    "Data preprocessing typically takes <span class="highlight">70-80% of a data scientist's time</span> but is the most crucial step for successful machine learning projects."
+                    "Text preprocessing is the foundation of all NLP tasks. A well-prepared dataset can make the difference between a mediocre model and a state-of-the-art system."
                 </p>
             </div>
         </div>
 
         <!-- Footer -->
         <div class="text-center mt-12 text-blue-100">
-            <p class="text-sm">Data Preprocessing • The Foundation of Machine Learning • Clean Data = Better Results</p>
+            <p class="text-sm">Data Preprocessing Pipeline • Text Cleaning • NLP Preparation • Machine Learning Readiness</p>
         </div>
     </div>
 </body>
 </html>
+```
