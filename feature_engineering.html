@@ -1,0 +1,978 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Engineering in NLP - Complete Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .code-block {
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            color: #e2e8f0;
+            line-height: 1.5;
+        }
+        .method-card {
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            height: 100%;
+        }
+        .method-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        .tab-button.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .example-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid #3b82f6;
+            border-radius: 0.5rem;
+        }
+        .analogy-box {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border-left: 4px solid #ef4444;
+            border-radius: 0.5rem;
+        }
+        .concept-box {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border-radius: 0.5rem;
+            border: 1px dashed #d1d5db;
+        }
+        .step-item {
+            border-left: 3px solid #3b82f6;
+            padding-left: 1rem;
+            margin-left: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
+                Feature Engineering in NLP
+            </h1>
+            <p class="text-xl text-slate-600 max-w-4xl mx-auto">
+                A comprehensive guide to transforming text data into meaningful features for machine learning
+            </p>
+            <div class="mt-6 flex justify-center">
+                <div class="bg-white px-6 py-3 rounded-full shadow-sm">
+                    <span class="text-sm text-slate-600">Natural Language Processing | Machine Learning | Data Science</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Introduction Section -->
+        <section class="bg-white rounded-xl shadow-xl p-8 mb-12">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6 flex items-center">
+                <i class="fas fa-lightbulb mr-3 text-yellow-500"></i>What is Feature Engineering?
+            </h2>
+            
+            <div class="prose max-w-none">
+                <p class="text-lg text-slate-700 mb-6">
+                    Feature engineering is the process of transforming raw data into a format that machine learning algorithms can understand and use effectively. In Natural Language Processing (NLP), this means converting text—something humans understand easily—into numerical representations that computers can process.
+                </p>
+                
+                <div class="grid md:grid-cols-2 gap-8 my-8">
+                    <div class="concept-box p-6">
+                        <h3 class="text-xl font-semibold text-slate-800 mb-4 flex items-center">
+                            <i class="fas fa-question-circle mr-2 text-blue-500"></i>Why is it Needed?
+                        </h3>
+                        <p class="text-slate-600 mb-4">
+                            Computers can't understand text directly. They need numbers. Feature engineering bridges this gap by creating numerical features that capture the meaning, structure, and patterns in text data.
+                        </p>
+                        <ul class="space-y-2 text-slate-600">
+                            <li class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1"></i> Converts text to numbers</li>
+                            <li class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1"></i> Captures important patterns</li>
+                            <li class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1"></i> Improves model performance</li>
+                            <li class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1"></i> Reduces noise and redundancy</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="concept-box p-6">
+                        <h3 class="text-xl font-semibold text-slate-800 mb-4 flex items-center">
+                            <i class="fas fa-project-diagram mr-2 text-purple-500"></i>The Process
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="step-item">
+                                <p class="font-medium text-slate-800">1. Text Preprocessing</p>
+                                <p class="text-sm text-slate-600">Clean and normalize text (lowercase, remove punctuation, etc.)</p>
+                            </div>
+                            <div class="step-item">
+                                <p class="font-medium text-slate-800">2. Feature Extraction</p>
+                                <p class="text-sm text-slate-600">Convert text to numerical features using various methods</p>
+                            </div>
+                            <div class="step-item">
+                                <p class="font-medium text-slate-800">3. Feature Selection</p>
+                                <p class="text-sm text-slate-600">Choose the most relevant features for your task</p>
+                            </div>
+                            <div class="step-item">
+                                <p class="font-medium text-slate-800">4. Model Training</p>
+                                <p class="text-sm text-slate-600">Use the engineered features to train machine learning models</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="example-box p-6 my-8">
+                    <h3 class="text-lg font-semibold text-slate-800 mb-3 flex items-center">
+                        <i class="fas fa-flask mr-2"></i>Simple Example: Email Classification
+                    </h3>
+                    <p class="text-slate-600 mb-4">
+                        Let's say we want to classify emails as "spam" or "not spam". Here's how feature engineering helps:
+                    </p>
+                    <div class="grid md:grid-cols-3 gap-4 text-sm">
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="font-medium text-slate-800 mb-2">Original Email:</p>
+                            <p class="text-slate-600">"Congratulations! You've won $1,000,000! Click here now!"</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="font-medium text-slate-800 mb-2">After Preprocessing:</p>
+                            <p class="text-slate-600">"congratulations youve won click here now"</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="font-medium text-slate-800 mb-2">Numerical Features:</p>
+                            <p class="text-slate-600">[1, 1, 1, 1, 1, 1] (word presence)<br>High "won" score, high "click" score</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-600 mt-4">
+                        The model can now use these numerical features to learn that emails with words like "won" and "click" are likely spam.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation Tabs -->
+        <div class="flex flex-wrap justify-center gap-2 mb-12">
+            <button class="tab-button active px-6 py-3 rounded-lg font-medium text-slate-700 hover:bg-slate-200 transition-colors" data-tab="traditional">
+                <i class="fas fa-book mr-2"></i>Traditional Methods
+            </button>
+            <button class="tab-button px-6 py-3 rounded-lg font-medium text-slate-700 hover:bg-slate-200 transition-colors" data-tab="modern">
+                <i class="fas fa-rocket mr-2"></i>Modern Methods
+            </button>
+            <button class="tab-button px-6 py-3 rounded-lg font-medium text-slate-700 hover:bg-slate-200 transition-colors" data-tab="comparison">
+                <i class="fas fa-chart-line mr-2"></i>Complete Comparison
+            </button>
+        </div>
+
+        <!-- Traditional Methods Section -->
+        <div id="traditional" class="tab-content">
+            <h2 class="text-3xl font-bold text-slate-800 mb-8 text-center">Traditional Feature Engineering Methods</h2>
+            
+            <div class="grid lg:grid-cols-3 gap-8 mb-12">
+                <!-- Bag of Words Card -->
+                <div class="method-card bg-white shadow-lg">
+                    <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-4">
+                        <h3 class="text-xl font-bold text-white flex items-center">
+                            <i class="fas fa-inbox mr-3"></i>Bag of Words (BoW)
+                        </h3>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-slate-600 mb-4">
+                            The simplest approach that treats text as an unordered collection of words, like a "bag" where you can see what words are present but not their order.
+                        </p>
+                        
+                        <div class="example-box p-4 mb-4">
+                            <p class="text-sm font-medium text-slate-700 mb-2">How it Works:</p>
+                            <p class="text-sm text-slate-600">"I love machine learning" → Count each word: I=1, love=1, machine=1, learning=1</p>
+                        </div>
+                        
+                        <div class="analogy-box p-4 mb-4">
+                            <p class="text-sm font-medium text-slate-700 mb-2">Think of it like:</p>
+                            <p class="text-sm text-slate-600">A grocery list - you know what items you bought, but not the order you put them in your cart.</p>
+                        </div>
+                        
+                        <div class="code-block">
+                            <pre><code>from sklearn.feature_extraction.text import CountVectorizer
+
+# Our sample documents
+documents = [
+    "I love machine learning",
+    "Machine learning is fascinating",
+    "I enjoy learning new things"
+]
+
+# Create the BoW vectorizer
+vectorizer = CountVectorizer()
+
+# Transform text to numerical features
+bow_matrix = vectorizer.fit_transform(documents)
+
+# Show what happened
+feature_names = vectorizer.get_feature_names_out()
+print("Vocabulary created:", feature_names)
+print("BoW Matrix shape:", bow_matrix.shape)
+print("First document representation:")
+for word, count in zip(feature_names, bow_matrix[0].toarray()[0]):
+    if count > 0:
+        print(f"  '{word}': {count}")</code></pre>
+                        </div>
+                        
+                        <div class="mt-4 text-sm">
+                            <p class="text-green-700"><i class="fas fa-check-circle mr-1"></i> <strong>Pros:</strong> Simple, fast, easy to understand</p>
+                            <p class="text-red-700"><i class="fas fa-times-circle mr-1"></i> <strong>Cons:</strong> Ignores word order and context</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TF-IDF Card -->
+                <div class="method-card bg-white shadow-lg">
+                    <div class="bg-gradient-to-r from-green-500 to-green-600 p-4">
+                        <h3 class="text-xl font-bold text-white flex items-center">
+                            <i class="fas fa-chart-bar mr-3"></i>TF-IDF
+                        </h3>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-slate-600 mb-4">
+                            An improved version of BoW that not only counts word frequency but also considers how unique a word is across all documents.
+                        </p>
+                        
+                        <div class="example-box p-4 mb-4">
+                            <p class="text-sm font-medium text-slate-700 mb-2">The Formula:</p>
+                            <p class="text-sm text-slate-600">TF-IDF = (Term Frequency) × (Inverse Document Frequency)</p>
+                            <p class="text-xs text-slate-500 mt-1">Common words like "the" get low scores, rare important words get high scores</p>
+                        </div>
+                        
+                        <div class="analogy-box p-4 mb-4">
+                            <p class="text-sm font-medium text-slate-700 mb-2">Think of it like:</p>
+                            <p class="text-sm text-slate-600">A detective assigning importance to clues - common clues (like footprints) are less valuable than rare, unique clues (like a specific type of mud).</p>
+                        </div>
+                        
+                        <div class="code-block">
+                            <pre><code>from sklearn.feature_extraction.text import TfidfVectorizer
+
+# Create TF-IDF vectorizer
+tfidf = TfidfVectorizer(
+    max_features=1000,
+    stop_words='english',  # Remove common words like 'the', 'is'
+    ngram_range=(1, 2)     # Include single words and word pairs
+)
+
+# Transform our documents
+tfidf_matrix = tfidf.fit_transform(documents)
+
+# Show the results
+feature_names = tfidf.get_feature_names_out()
+print("TF-IDF Matrix shape:", tfidf_matrix.shape)
+
+# Look at the first document
+print("\nTF-IDF scores for first document:")
+doc_vector = tfidf_matrix[0].toarray()[0]
+word_scores = [(feature_names[i], doc_vector[i]) 
+               for i in range(len(feature_names)) if doc_vector[i] > 0]
+               
+# Sort by score (highest first)
+word_scores.sort(key=lambda x: x[1], reverse=True)
+for word, score in word_scores:
+    print(f"  {word}: {score:.4f}")</code></pre>
+                        </div>
+                        
+                        <div class="mt-4 text-sm">
+                            <p class="text-green-700"><i class="fas fa-check-circle mr-1"></i> <strong>Pros:</strong> Better than BoW, highlights important words</p>
+                            <p class="text-red-700"><i class="fas fa-times-circle mr-1"></i> <strong>Cons:</strong> Still ignores word order and meaning</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- N-grams Card -->
+                <div class="method-card bg-white shadow-lg">
+                    <div class="bg-gradient-to-r from-purple-500 to-purple-600 p-4">
+                        <h3 class="text-xl font-bold text-white flex items-center">
+                            <i class="fas fa-link mr-3"></i>N-grams
+                        </h3>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-slate-600 mb-4">
+                            Extends BoW by considering sequences of words (n-grams), helping to capture some word order and phrase-level information.
+                        </p>
+                        
+                        <div class="example-box p-4 mb-4">
+                            <p class="text-sm font-medium text-slate-700 mb-2">Types of N-grams:</p>
+                            <p class="text-sm text-slate-600">Unigrams: "I", "love", "machine"<br>Bigrams: "I love", "love machine", "machine learning"<br>Trigrams: "I love machine", "love machine learning"</p>
+                        </div>
+                        
+                        <div class="analogy-box p-4 mb-4">
+                            <p class="text-sm font-medium text-slate-700 mb-2">Think of it like:</p>
+                            <p class="text-sm text-slate-600">Instead of just knowing individual words, you also know common word combinations, like recognizing "machine learning" as a single concept.</p>
+                        </div>
+                        
+                        <div class="code-block">
+                            <pre><code># Create n-gram vectorizer
+ngram_vectorizer = CountVectorizer(
+    ngram_range=(1, 3),  # Use unigrams, bigrams, and trigrams
+    max_features=500
+)
+
+# Transform documents
+ngram_matrix = ngram_vectorizer.fit_transform(documents)
+feature_names = ngram_vectorizer.get_feature_names_out()
+
+print("N-gram features created:")
+for i, feature in enumerate(feature_names[:12]):
+    print(f"  {feature}")
+
+# Compare with simple BoW
+bow_vectorizer = CountVectorizer()
+bow_matrix = bow_vectorizer.fit_transform(documents)
+
+print(f"\nVocabulary size comparison:")
+print(f"  Simple BoW: {bow_matrix.shape[1]} features")
+print(f"  With N-grams: {ngram_matrix.shape[1]} features")
+
+# Show how n-grams capture phrases
+print("\nNotice how we have phrases like:")
+ngram_features = [f for f in feature_names if ' ' in f]
+for feature in ngram_features[:5]:
+    print(f"  '{feature}'")</code></pre>
+                        </div>
+                        
+                        <div class="mt-4 text-sm">
+                            <p class="text-green-700"><i class="fas fa-check-circle mr-1"></i> <strong>Pros:</strong> Captures word order and phrases</p>
+                            <p class="text-red-700"><i class="fas fa-times-circle mr-1"></i> <strong>Cons:</strong> Vocabulary grows very large, still limited context</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modern Methods Section -->
+        <div id="modern" class="tab-content hidden">
+            <h2 class="text-3xl font-bold text-slate-800 mb-8 text-center">Modern Feature Engineering Methods</h2>
+            
+            <div class="grid lg:grid-cols-2 gap-8 mb-12">
+                <!-- Pre-trained Embeddings Card -->
+                <div class="method-card bg-white shadow-lg">
+                    <div class="bg-gradient-to-r from-orange-500 to-red-500 p-4">
+                        <h3 class="text-xl font-bold text-white flex items-center">
+                            <i class="fas fa-download mr-3"></i>Pre-trained Word Embeddings
+                        </h3>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-slate-600 mb-6">
+                            Instead of just counting words, these methods represent each word as a dense vector in a multi-dimensional space, where similar words are close together.
+                        </p>
+                        
+                        <div class="example-box p-4 mb-6">
+                            <p class="text-sm font-medium text-slate-700 mb-2">The Big Idea:</p>
+                            <p class="text-sm text-slate-600">Words are represented as points in space. Words with similar meanings are close together, capturing semantic relationships.</p>
+                        </div>
+                        
+                        <!-- Word2Vec -->
+                        <div class="mb-8">
+                            <h4 class="text-lg font-semibold text-slate-800 flex items-center mb-3">
+                                <i class="fas fa-microchip mr-2 text-orange-500"></i>Word2Vec (Google)
+                            </h4>
+                            <p class="text-slate-600 mb-4">
+                                Learns word vectors by predicting surrounding words in a sentence. Words that appear in similar contexts get similar vectors.
+                            </p>
+                            
+                            <div class="analogy-box p-4 mb-4">
+                                <p class="text-sm font-medium text-slate-700 mb-2">Famous Example:</p>
+                                <p class="text-sm text-slate-600">"king" - "man" + "woman" ≈ "queen"</p>
+                                <p class="text-xs text-slate-500 mt-1">The model learns that the relationship between king and man is similar to the relationship between queen and woman.</p>
+                            </div>
+                            
+                            <div class="code-block text-xs">
+                                <pre><code># Using gensim for Word2Vec
+from gensim.models import Word2Vec
+import nltk
+
+# Prepare our data (tokenized sentences)
+sentences = [nltk.word_tokenize(doc.lower()) for doc in documents]
+
+# Train Word2Vec model
+model = Word2Vec(
+    sentences, 
+    vector_size=100,     # Size of the word vectors
+    window=5,           # Context window size
+    min_count=1,        # Minimum word frequency
+    workers=4           # Number of threads
+)
+
+# Get word vectors
+king_vector = model.wv['learning']
+print(f"Word2Vec vector shape: {king_vector.shape}")
+
+# Find similar words
+similar_words = model.wv.most_similar('learning', topn=3)
+print("\nWords similar to 'learning':")
+for word, similarity in similar_words:
+    print(f"  {word}: {similarity:.3f}")
+
+# Word analogies (if we had more data)
+# result = model.wv.most_similar(positive=['woman', 'king'], negative=['man'], topn=1)
+# print(f"\n'king' - 'man' + 'woman' ≈ {result[0][0]}")</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- GloVe -->
+                        <div class="mb-8">
+                            <h4 class="text-lg font-semibold text-slate-800 flex items-center mb-3">
+                                <i class="fas fa-globe mr-2 text-red-500"></i>GloVe (Stanford)
+                            </h4>
+                            <p class="text-slate-600 mb-4">
+                                Creates word vectors by analyzing global word co-occurrence statistics across a large corpus, combining the benefits of global matrix factorization and local context window methods.
+                            </p>
+                            
+                            <div class="example-box p-4 mb-4">
+                                <p class="text-sm font-medium text-slate-700 mb-2">How it's Different:</p>
+                                <p class="text-sm text-slate-600">While Word2Vec looks at local context, GloVe looks at how often words appear together across the entire dataset, capturing more global patterns.</p>
+                            </div>
+                            
+                            <div class="code-block text-xs">
+                                <pre><code># GloVe typically uses pre-trained vectors
+# Here's how you would use them
+
+import numpy as np
+
+def create_embedding_matrix(vocab, embedding_dim=50):
+    """Create embedding matrix from pre-trained GloVe vectors"""
+    # In practice, you'd load from glove.6B.50d.txt
+    embedding_matrix = np.zeros((len(vocab), embedding_dim))
+    
+    # For each word in our vocabulary
+    for i, word in enumerate(vocab):
+        # In real implementation, look up the word in GloVe dictionary
+        # If found, use its vector; if not, use random vector
+        embedding_matrix[i] = np.random.normal(0, 1, embedding_dim)
+    
+    return embedding_matrix
+
+# Create vocabulary
+vocab = ['i', 'love', 'machine', 'learning', 'is', 'fascinating']
+embedding_matrix = create_embedding_matrix(vocab)
+print(f"GloVe embedding matrix shape: {embedding_matrix.shape}")
+print(f"Embedding for 'learning': {embedding_matrix[vocab.index('learning')][:5]}...")</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- FastText -->
+                        <div>
+                            <h4 class="text-lg font-semibold text-slate-800 flex items-center mb-3">
+                                <i class="fas fa-bolt mr-2 text-orange-600"></i>FastText (Facebook)
+                            </h4>
+                            <p class="text-slate-600 mb-4">
+                                A breakthrough approach that represents words as collections of character n-grams, allowing it to handle unknown words and capture subword patterns.
+                            </p>
+                            
+                            <div class="analogy-box p-4 mb-4">
+                                <p class="text-sm font-medium text-slate-700 mb-2">The Innovation:</p>
+                                <p class="text-sm text-slate-600">Instead of treating "unhappiness" as a single unknown word, FastText breaks it into character n-grams like "un", "unh", "nha", "hap", etc., and can understand it's related to "happy".</p>
+                            </div>
+                            
+                            <div class="code-block text-xs">
+                                <pre><code>class FastTextDemo:
+    def __init__(self, n=3):
+        self.n = n  # n-gram size
+        self.embedding_dim = 300
+        
+    def get_subwords(self, word):
+        """Get character n-grams for a word"""
+        if len(word) < self.n:
+            return [word]
+        
+        # Add special boundary symbols
+        word_padded = f"<{word}>"
+        subwords = []
+        
+        # Generate character n-grams
+        for i in range(len(word_padded) - self.n + 1):
+            subwords.append(word_padded[i:i+self.n])
+            
+        # Also include the whole word
+        subwords.append(word)
+        return subwords
+    
+    def get_word_vector(self, word):
+        """Get vector by averaging subword vectors"""
+        subwords = self.get_subwords(word.lower())
+        # In real implementation, average the vectors of these subwords
+        return np.random.random(self.embedding_dim)
+
+# Demo the concept
+ft = FastTextDemo()
+word = "unhappiness"
+subwords = ft.get_subwords(word)
+
+print(f"Subword units in '{word}':")
+for subword in subwords:
+    print(f"  {subword}")
+
+print(f"\nFastText can understand words like '{word}' even if they weren't in the training data!")
+print("This is why it's great for social media text with slang and misspellings.")</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contextual Embeddings Card -->
+                <div class="method-card bg-white shadow-lg">
+                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-4">
+                        <h3 class="text-xl font-bold text-white flex items-center">
+                            <i class="fas fa-sync-alt mr-3"></i>Contextual Embeddings
+                        </h3>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-slate-600 mb-6">
+                            The most advanced approach where word representations change based on the context in which they appear, capturing the true meaning of words in sentences.
+                        </p>
+                        
+                        <div class="example-box p-4 mb-6">
+                            <p class="text-sm font-medium text-slate-700 mb-2">The Key Insight:</p>
+                            <p class="text-sm text-slate-600">The word "bank" has different meanings in "river bank" vs. "money bank". Contextual embeddings create different vectors for the same word in different contexts.</p>
+                        </div>
+                        
+                        <!-- BERT -->
+                        <div class="mb-8">
+                            <h4 class="text-lg font-semibold text-slate-800 flex items-center mb-3">
+                                <i class="fas fa-brain mr-2 text-indigo-500"></i>BERT
+                            </h4>
+                            <p class="text-slate-600 mb-4">
+                                Uses a bidirectional transformer architecture to consider the entire sentence context when creating word representations, looking at words both before and after.
+                            </p>
+                            
+                            <div class="analogy-box p-4 mb-4">
+                                <p class="text-sm font-medium text-slate-700 mb-2">How it Works:</p>
+                                <p class="text-sm text-slate-600">For each word, BERT looks at all other words in the sentence simultaneously, creating a rich representation that understands the full context.</p>
+                            </div>
+                            
+                            <div class="code-block text-xs">
+                                <pre><code># Using Hugging Face transformers
+from transformers import AutoTokenizer, AutoModel
+import torch
+
+# Load pre-trained BERT model
+tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
+model = AutoModel.from_pretrained('bert-base-uncased')
+
+# Example sentences with ambiguous word "bank"
+sentences = [
+    "I went to the bank to deposit money",
+    "We sat by the bank of the river"
+]
+
+print("BERT understands context! Same word, different meanings:\n")
+
+for i, sentence in enumerate(sentences):
+    # Tokenize the sentence
+    inputs = tokenizer(sentence, return_tensors="pt", padding=True, truncation=True)
+    
+    # Get contextual embeddings
+    with torch.no_grad():
+        outputs = model(**inputs)
+        # Use the last hidden state (contextual embeddings)
+        contextual_embeddings = outputs.last_hidden_state
+    
+    # Get the embedding for the word "bank"
+    tokens = tokenizer.convert_ids_to_tokens(inputs['input_ids'][0])
+    
+    # Find the position of "bank" in the tokens
+    bank_positions = [j for j, token in enumerate(tokens) if 'bank' in token.lower()]
+    
+    if bank_positions:
+        bank_embedding = contextual_embeddings[0, bank_positions[0]]
+        print(f"Sentence {i+1}: {sentence}")
+        print(f"  'bank' embedding shape: {bank_embedding.shape}")
+        print(f"  First 5 values: {bank_embedding[:5].numpy()}")
+        print()
+
+print("Notice how the embeddings are different for the same word in different contexts!")</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- GPT -->
+                        <div class="mb-8">
+                            <h4 class="text-lg font-semibold text-slate-800 flex items-center mb-3">
+                                <i class="fas fa-feather-alt mr-2 text-purple-500"></i>GPT
+                            </h4>
+                            <p class="text-slate-600 mb-4">
+                                Uses a transformer architecture with a causal (left-to-right) approach, predicting the next word in a sequence and creating contextual embeddings in the process.
+                            </p>
+                            
+                            <div class="example-box p-4 mb-4">
+                                <p class="text-sm font-medium text-slate-700 mb-2">Generation Focus:</p>
+                                <p class="text-sm text-slate-600">While BERT is bidirectional, GPT processes text left-to-right, making it particularly good at text generation tasks.</p>
+                            </div>
+                            
+                            <div class="code-block text-xs">
+                                <pre><code># Using GPT-2
+from transformers import GPT2Tokenizer, GPT2Model
+
+# Load GPT-2 model
+gpt2_tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+gpt2_model = GPT2Model.from_pretrained('gpt2')
+
+# Make sure we have a padding token
+gpt2_tokenizer.pad_token = gpt2_tokenizer.eos_token
+
+# Example text
+text = "The artificial intelligence model processes language in a sequential manner"
+inputs = gpt2_tokenizer(text, return_tensors="pt", padding=True, truncation=True)
+
+# Get contextual embeddings
+with torch.no_grad():
+    gpt2_outputs = gpt2_model(**inputs)
+    gpt2_embeddings = gpt2_outputs.last_hidden_state
+
+print(f"GPT-2 embeddings shape: {gpt2_embeddings.shape}")
+print(f"  Sequence length: {gpt2_embeddings.shape[1]}")
+print(f"  Embedding dimension: {gpt2_embeddings.shape[2]}")
+
+# Show how GPT processes text sequentially
+tokens = gpt2_tokenizer.convert_ids_to_tokens(inputs['input_ids'][0])
+print(f"\nTokens: {tokens}")
+
+print("\nGPT creates context-aware representations")
+print("that are excellent for text generation tasks.")</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- RoBERTa -->
+                        <div>
+                            <h4 class="text-lg font-semibold text-slate-800 flex items-center mb-3">
+                                <i class="fas fa-shield-alt mr-2 text-indigo-600"></i>RoBERTa
+                            </h4>
+                            <p class="text-slate-600 mb-4">
+                                An optimized version of BERT with improved training procedures that often leads to better performance on various NLP tasks.
+                            </p>
+                            
+                            <div class="analogy-box p-4 mb-4">
+                                <p class="text-sm font-medium text-slate-700 mb-2">Key Improvements:</p>
+                                <p class="text-sm text-slate-600">• Trained on more data<br>• Longer training duration<br>• Larger batches<br>• Removed NSP task<br>• Dynamic masking</p>
+                            </div>
+                            
+                            <div class="code-block text-xs">
+                                <pre><code># RoBERTa implementation
+from transformers import RobertaTokenizer, RobertaModel
+
+# Load RoBERTa model
+roberta_tokenizer = RobertaTokenizer.from_pretrained('roberta-base')
+roberta_model = RobertaModel.from_pretrained('roberta-base')
+
+# Example usage
+text = "RoBERTa improves upon BERT with better training procedures"
+inputs = roberta_tokenizer(text, return_tensors="pt", padding=True, truncation=True)
+
+with torch.no_grad():
+    roberta_outputs = roberta_model(**inputs)
+    roberta_embeddings = roberta_outputs.last_hidden_state
+
+print(f"RoBERTa embeddings shape: {roberta_embeddings.shape}")
+
+# Compare with BERT
+print("\nRoBERTa vs BERT improvements:")
+improvements = [
+    "Trained on 45,000+ sentences (vs 16,000 in BERT)",
+    "Trained for 500,000 steps (vs 125,000 in BERT)",
+    "Uses larger batch sizes (8K vs 256 in BERT)",
+    "Removes NSP (Next Sentence Prediction) task",
+    "Uses dynamic masking instead of static masking"
+]
+
+for improvement in improvements:
+    print(f"  • {improvement}")
+
+print("\nThese changes often lead to better performance on NLP benchmarks!")</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Complete Comparison Section -->
+        <div id="comparison" class="tab-content hidden">
+            <div class="bg-white rounded-xl shadow-xl p-8 mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-8 text-center">
+                    <i class="fas fa-balance-scale mr-3"></i>Complete Method Comparison
+                </h2>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gradient-to-r from-slate-100 to-slate-200">
+                                <th class="border border-slate-300 px-4 py-3 text-left font-semibold text-slate-800">Feature</th>
+                                <th class="border border-slate-300 px-4 py-3 text-left font-semibold text-slate-800">Traditional Methods<br>(BoW, TF-IDF, N-grams)</th>
+                                <th class="border border-slate-300 px-4 py-3 text-left font-semibold text-slate-800">Pre-trained Embeddings<br>(Word2Vec, GloVe, FastText)</th>
+                                <th class="border border-slate-300 px-4 py-3 text-left font-semibold text-slate-800">Contextual Embeddings<br>(BERT, GPT, RoBERTa)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="hover:bg-slate-50">
+                                <td class="border border-slate-300 px-4 py-3 font-medium text-slate-800">Representation Type</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">Sparse, high-dimensional vectors based on word counts</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">Dense, fixed-size vectors that capture semantic meaning</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">Dense, context-dependent vectors that change with usage</td>
+                            </tr>
+                            <tr class="bg-slate-50 hover:bg-slate-100">
+                                <td class="border border-slate-300 px-4 py-3 font-medium text-slate-800">Context Awareness</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">None - ignores word order and surrounding words completely</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">Limited - same vector for a word in all contexts</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">High - vector changes based on surrounding words and sentence meaning</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="border border-slate-300 px-4 py-3 font-medium text-slate-800">Dimensionality</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">Vocabulary size (10,000-100,000+ dimensions), very sparse</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">Fixed size (50-300 dimensions), dense vectors</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">Fixed size (768-1024+ dimensions), dense vectors</td>
+                            </tr>
+                            <tr class="bg-slate-50 hover:bg-slate-100">
+                                <td class="border border-slate-300 px-4 py-3 font-medium text-slate-800">Training Requirement</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">Built directly from your corpus, no pre-training needed</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">Pre-trained on massive text corpora (Wikipedia, web text)</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">Pre-trained on enormous datasets with complex objectives</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="border border-slate-300 px-4 py-3 font-medium text-slate-800">Computational Cost</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">Low - fast to compute and store</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">Medium - requires loading pre-trained models</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">High - requires significant memory and often GPU acceleration</td>
+                            </tr>
+                            <tr class="bg-slate-50 hover:bg-slate-100">
+                                <td class="border border-slate-300 px-4 py-3 font-medium text-slate-800">Out-of-Vocabulary Handling</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">Ignored or mapped to unknown token</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">Problematic for Word2Vec/GloVe; FastText handles via subwords</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">Excellent - handles rare words, misspellings, and novel terms</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="border border-slate-300 px-4 py-3 font-medium text-slate-800">Semantic Understanding</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">Word frequency only, no semantic relationships</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">Captures word similarities and basic analogies</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">Captures deep semantic meaning, polysemy, and complex relationships</td>
+                            </tr>
+                            <tr class="bg-slate-50 hover:bg-slate-100">
+                                <td class="border border-slate-300 px-4 py-3 font-medium text-slate-800">Ease of Implementation</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">Very easy - available in scikit-learn</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">Moderate - requires downloading pre-trained models</td>
+                                <td class="border border-slate-300 px-4 py-3 text-slate-600">Complex - requires understanding of transformer architecture</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- When to Use Section -->
+            <div class="bg-white rounded-xl shadow-xl p-8 mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-8 text-center">
+                    <i class="fas fa-road mr-3"></i>When to Use Each Approach
+                </h2>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200">
+                        <h3 class="text-xl font-bold text-blue-800 mb-4 flex items-center">
+                            <i class="fas fa-check-circle mr-2"></i>Traditional Methods
+                        </h3>
+                        <p class="text-blue-700 mb-4 text-sm">Best for simple tasks with limited resources</p>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-arrow-right text-blue-500 mr-2 mt-1 text-sm"></i>
+                                <span class="text-sm text-slate-700">Small datasets with limited computational resources</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-arrow-right text-blue-500 mr-2 mt-1 text-sm"></i>
+                                <span class="text-sm text-slate-700">Simple text classification (spam detection, sentiment analysis)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-arrow-right text-blue-500 mr-2 mt-1 text-sm"></i>
+                                <span class="text-sm text-slate-700">Baseline models for comparison</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-arrow-right text-blue-500 mr-2 mt-1 text-sm"></i>
+                                <span class="text-sm text-slate-700">Document retrieval and information extraction</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-arrow-right text-blue-500 mr-2 mt-1 text-sm"></i>
+                                <span class="text-sm text-slate-700">When you need fast, interpretable results</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg border border-green-200">
+                        <h3 class="text-xl font-bold text-green-800 mb-4 flex items-center">
+                            <i class="fas fa-check-circle mr-2"></i>Pre-trained Embeddings
+                        </h3>
+                        <p class="text-green-700 mb-4 text-sm">Best for medium complexity tasks with semantic needs</p>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-arrow-right text-green-500 mr-2 mt-1 text-sm"></i>
+                                <span class="text-sm text-slate-700">Medium-sized datasets requiring semantic understanding</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-arrow-right text-green-500 mr-2 mt-1 text-sm"></i>
+                                <span class="text-sm text-slate-700">Word similarity, analogy, and recommendation tasks</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-arrow-right text-green-500 mr-2 mt-1 text-sm"></i>
+                                <span class="text-sm text-slate-700">When computational resources are limited but better than BoW</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-arrow-right text-green-500 mr-2 mt-1 text-sm"></i>
+                                <span class="text-sm text-slate-700">Transfer learning with limited labeled data</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-arrow-right text-green-500 mr-2 mt-1 text-sm"></i>
+                                <span class="text-sm text-slate-700">FastText for social media text with slang and misspellings</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200">
+                        <h3 class="text-xl font-bold text-purple-800 mb-4 flex items-center">
+                            <i class="fas fa-check-circle mr-2"></i>Contextual Embeddings
+                        </h3>
+                        <p class="text-purple-700 mb-4 text-sm">Best for state-of-the-art performance on complex tasks</p>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-arrow-right text-purple-500 mr-2 mt-1 text-sm"></i>
+                                <span class="text-sm text-slate-700">State-of-the-art performance on complex NLP tasks</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-arrow-right text-purple-500 mr-2 mt-1 text-sm"></i>
+                                <span class="text-sm text-slate-700">Tasks requiring deep semantic understanding (QA, summarization)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-arrow-right text-purple-500 mr-2 mt-1 text-sm"></i>
+                                <span class="text-sm text-slate-700">When ambiguity resolution is critical (polysemy)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-arrow-right text-purple-500 mr-2 mt-1 text-sm"></i>
+                                <span class="text-sm text-slate-700">Large datasets with sufficient computational resources</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-arrow-right text-purple-500 mr-2 mt-1 text-sm"></i>
+                                <span class="text-sm text-slate-700">Cutting-edge applications like chatbots and virtual assistants</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Evolution Timeline -->
+            <div class="bg-white rounded-xl shadow-xl p-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-8 text-center">
+                    <i class="fas fa-history mr-3"></i>Evolution of NLP Feature Engineering
+                </h2>
+                
+                <div class="relative">
+                    <!-- Timeline line -->
+                    <div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-400 to-purple-500"></div>
+                    
+                    <!-- Timeline items -->
+                    <div class="space-y-8">
+                        <div class="flex items-center">
+                            <div class="z-10 flex items-center justify-center w-16 h-16 bg-blue-500 rounded-full ring-8 ring-white">
+                                <i class="fas fa-calendar text-white"></i>
+                            </div>
+                            <div class="ml-6 bg-white p-6 rounded-lg shadow-md flex-1 border border-slate-200">
+                                <h3 class="text-lg font-bold text-slate-800">2000s: Traditional Methods</h3>
+                                <p class="text-slate-600 mt-2">Bag of Words and TF-IDF dominate text processing. Simple but effective for basic tasks.</p>
+                                <div class="mt-3 text-xs text-slate-500">Key papers: Salton et al. (1975), Manning et al. (1999)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <div class="z-10 flex items-center justify-center w-16 h-16 bg-green-500 rounded-full ring-8 ring-white">
+                                <i class="fas fa-microchip text-white"></i>
+                            </div>
+                            <div class="ml-6 bg-white p-6 rounded-lg shadow-md flex-1 border border-slate-200">
+                                <h3 class="text-lg font-bold text-slate-800">2013: Word Embeddings</h3>
+                                <p class="text-slate-600 mt-2">Word2Vec revolutionizes NLP by introducing dense vector representations that capture semantic meaning.</p>
+                                <div class="mt-3 text-xs text-slate-500">Key papers: Mikolov et al. (2013), Pennington et al. (2014)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <div class="z-10 flex items-center justify-center w-16 h-16 bg-purple-500 rounded-full ring-8 ring-white">
+                                <i class="fas fa-sync-alt text-white"></i>
+                            </div>
+                            <div class="ml-6 bg-white p-6 rounded-lg shadow-md flex-1 border border-slate-200">
+                                <h3 class="text-lg font-bold text-slate-800">2018: Contextual Models</h3>
+                                <p class="text-slate-600 mt-2">BERT and similar models introduce contextual embeddings, understanding words based on their surrounding context.</p>
+                                <div class="mt-3 text-xs text-slate-500">Key papers: Devlin et al. (2018), Radford et al. (2018)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <div class="z-10 flex items-center justify-center w-16 h-16 bg-indigo-500 rounded-full ring-8 ring-white">
+                                <i class="fas fa-robot text-white"></i>
+                            </div>
+                            <div class="ml-6 bg-white p-6 rounded-lg shadow-md flex-1 border border-slate-200">
+                                <h3 class="text-lg font-bold text-slate-800">2020s: Large Language Models</h3>
+                                <p class="text-slate-600 mt-2">GPT-3 and similar models with billions of parameters push the boundaries of what's possible in NLP.</p>
+                                <div class="mt-3 text-xs text-slate-500">Key papers: Brown et al. (2020), Touvron et al. (2023)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center mt-16 pt-8 border-t border-slate-200">
+            <div class="flex justify-center space-x-6 mb-4">
+                <a href="#" class="text-slate-500 hover:text-slate-700 transition-colors">
+                    <i class="fab fa-github text-2xl"></i>
+                </a>
+                <a href="#" class="text-slate-500 hover:text-slate-700 transition-colors">
+                    <i class="fab fa-linkedin text-2xl"></i>
+                </a>
+                <a href="#" class="text-slate-500 hover:text-slate-700 transition-colors">
+                    <i class="fab fa-twitter text-2xl"></i>
+                </a>
+            </div>
+            <p class="text-slate-500 text-sm">
+                © 2024 Feature Engineering in NLP. This guide explains concepts and includes code examples for educational purposes.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => {
+                        t.classList.remove('active');
+                        t.classList.add('text-slate-700');
+                    });
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Hide all tab contents
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    
+                    // Show selected tab content
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.remove('hidden');
+                    
+                    // Scroll to top of content
+                    window.scrollTo({
+                        top: document.querySelector('header').offsetHeight,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+```
